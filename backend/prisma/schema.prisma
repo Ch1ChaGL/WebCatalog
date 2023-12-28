@@ -29,6 +29,9 @@ model User {
   banned            Boolean
   roleUser          RoleUser[]
   userSocialNetwork UserSocialNetwork[]
+  userPost          UserPost[]
+  comment           Comment[]
+  rating            Rating[]
 }
 
 model RoleUser {
@@ -51,17 +54,72 @@ model UserSocialNetwork {
 }
 
 model Category {
-  categoryId   Int    @id @default(autoincrement()) @map("category_id")
-  categoryName String @map("category_name")
+  categoryId   Int            @id @default(autoincrement()) @map("category_id")
+  categoryName String         @map("category_name")
+  categoryPost CategoryPost[]
 }
 
-// model CategoryPost {
+model CategoryPost {
+  categoryId Int      @map("category_id")
+  postId     Int      @map("post_id")
+  Category   Category @relation(fields: [categoryId], references: [categoryId])
+  Post       Post     @relation(fields: [postId], references: [postId])
 
-//}
+  @@id([categoryId, postId])
+}
 
 model Post {
-  postId      Int     @id @default(autoincrement()) @map("post_id")
-  postName    String  @map("post_name")
-  banned      Boolean
-  description String
+  postId       Int            @id @default(autoincrement()) @map("post_id")
+  postName     String         @map("post_name")
+  banned       Boolean
+  description  String
+  categoryPost CategoryPost[]
+  userPost     UserPost[]
+  postImage    PostImage[]
+  comment      Comment[]
+  rating       Rating[]
+}
+
+model UserPost {
+  postId Int  @map("post_id")
+  userId Int  @map("user_id")
+  User   User @relation(fields: [userId], references: [userId])
+  Post   Post @relation(fields: [postId], references: [postId])
+
+  @@id([postId, userId])
+}
+
+model Images {
+  imageId   Int         @id @default(autoincrement()) @map("image_id")
+  filePath  String      @map("file_path")
+  postImage PostImage[]
+}
+
+model PostImage {
+  postId  Int    @map("post_id")
+  imageId Int    @map("image_id")
+  order   Int
+  Post    Post   @relation(fields: [postId], references: [postId])
+  Images  Images @relation(fields: [imageId], references: [imageId])
+
+  @@id([postId, imageId])
+}
+
+model Comment {
+  commentId   Int    @id @default(autoincrement()) @map("comment_id")
+  userId      Int    @map("user_id")
+  postId      Int    @map("post_id")
+  commentText String @map("comment_text")
+  User        User   @relation(fields: [userId], references: [userId])
+  Post        Post   @relation(fields: [postId], references: [postId])
+}
+
+model Rating {
+  userId Int  @map("user_id")
+  postId Int  @map("post_id")
+  rating Int
+  User   User @relation(fields: [userId], references: [userId])
+  Post   Post @relation(fields: [postId], references: [postId])
+
+  @@id([userId, postId])
 }
