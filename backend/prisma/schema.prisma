@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  roleId   Int        @id @default(autoincrement()) @map("role_id")
+  roleName String     @map("role_name")
+  roleUser RoleUser[]
+}
+
+model SocialNetwork {
+  socialNetworkId   Int                 @id @default(autoincrement()) @map("social_network_id")
+  socialNetworkName String              @map("social_network_name")
+  userSocialNetwork UserSocialNetwork[]
+}
+
+model User {
+  userId            Int                 @id @default(autoincrement()) @map("user_id")
+  roleId            Int                 @map("role_id")
+  firstName         String              @map("first_name")
+  lastName          String              @map("last_name")
+  email             String
+  password          String
+  banned            Boolean
+  roleUser          RoleUser[]
+  userSocialNetwork UserSocialNetwork[]
+}
+
+model RoleUser {
+  roleId Int  @map("role_id")
+  userId Int  @map("user_id")
+  Role   Role @relation(fields: [roleId], references: [roleId])
+  User   User @relation(fields: [userId], references: [userId])
+
+  @@id([roleId, userId])
+}
+
+model UserSocialNetwork {
+  userId          Int           @map("user_id")
+  socialNetworkId Int           @map("social_network_id")
+  link            String
+  SocialNetwork   SocialNetwork @relation(fields: [socialNetworkId], references: [socialNetworkId])
+  User            User          @relation(fields: [userId], references: [userId])
+
+  @@id([userId, socialNetworkId])
+}
+
+model Category {
+  categoryId   Int    @id @default(autoincrement()) @map("category_id")
+  categoryName String @map("category_name")
+}
+
+// model CategoryPost {
+
+//}
+
+model Post {
+  postId      Int     @id @default(autoincrement()) @map("post_id")
+  postName    String  @map("post_name")
+  banned      Boolean
+  description String
+}
