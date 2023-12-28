@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -25,4 +28,20 @@ export class UsersController {
   async getAllUsers() {
     return await this.usersService.getAllUsers();
   }
+
+  @Get(':id')
+  async getUserById(@Param('id') id) {
+    return await this.usersService.getUserById(+id);
+  }
+
+  @HttpCode(200)
+  @Delete(':id')
+  async deleteUserById(@Param('id') id) {
+    return await this.usersService.deleteUserById(+id);
+  }
+
+  /**
+   * TODO Обновление данных пользователя
+   * TODO Бан и разбан пользователя
+   */
 }

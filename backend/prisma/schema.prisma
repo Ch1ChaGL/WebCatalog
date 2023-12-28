@@ -27,6 +27,7 @@ model User {
   email             String
   password          String
   banned            Boolean             @default(false)
+  banReason         String?             @map("ban_reason")
   roleUser          RoleUser[]
   userSocialNetwork UserSocialNetwork[]
   userPost          UserPost[]
@@ -37,8 +38,8 @@ model User {
 model RoleUser {
   roleId String @map("role_id")
   userId Int    @map("user_id")
-  Role   Role   @relation(fields: [roleId], references: [roleId])
-  User   User   @relation(fields: [userId], references: [userId])
+  Role   Role   @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
+  User   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@id([roleId, userId])
 }

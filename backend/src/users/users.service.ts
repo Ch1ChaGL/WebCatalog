@@ -4,9 +4,7 @@ import { RoleUser, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { hash } from 'argon2';
 
-type UserWithoutPassword = Omit<User, 'password'> & {
-  roles: string[];
-};
+type UserWithoutPassword = Omit<User, 'password'> & { roles: string[] };
 
 @Injectable()
 export class UsersService {
@@ -32,7 +30,7 @@ export class UsersService {
     });
 
     if (oldUser)
-      new BadRequestException({
+      throw new BadRequestException({
         message:
           'Пользователь с таким email уже зарегестрирован. Попробуйте снова, используя другой email',
       });
@@ -46,7 +44,7 @@ export class UsersService {
     });
 
     if (!roles.length)
-      new BadRequestException(
+      throw new BadRequestException(
         'Количество ролей пользователя не может равнятся нулю',
       );
 
@@ -61,8 +59,9 @@ export class UsersService {
       ),
     );
 
+    const { password, ...userWithoutPassword } = createdUser;
     return {
-      ...createdUser,
+      ...userWithoutPassword,
       roles: await this.getUserRoles(createdUser.userId),
     };
   }
@@ -71,12 +70,44 @@ export class UsersService {
     const getedUsers = await this.prisma.user.findMany();
 
     const users = Promise.all(
-      getedUsers.map(async user => ({
+      getedUsers.map(async ({ password, ...user }) => ({
         ...user,
         roles: await this.getUserRoles(user.userId),
       })),
     );
 
     return users;
+  }
+
+  async getUserById(userId: number): Promise<UserWithoutPassword> | null {
+    const getedUser = await this.prisma.user.findUnique({
+      where: {
+        userId: +userId,
+      },
+    });
+    const { password, ...user } = getedUser;
+
+    return { ...user, roles: await this.getUserRoles(user.userId) };
+  }
+
+  async deleteUserById(userId: number): Promise<Boolean> {
+    const findUser = await this.prisma.user.findFirst({
+      where: {
+        userId,
+      },
+    });
+
+    if (!findUser)
+      throw new BadRequestException({
+        message: 'Пользователя с таким id не существует',
+      });
+
+    const deletedUser = await this.prisma.user.delete({
+      where: {
+        userId,
+      },
+    });
+
+    return deletedUser ? true : false;
   }
 }
