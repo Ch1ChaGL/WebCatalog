@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Role {
-  roleId   Int        @id @default(autoincrement()) @map("role_id")
+  roleId   String     @id @map("role_id")
   roleName String     @map("role_name")
   roleUser RoleUser[]
 }
@@ -21,12 +21,12 @@ model SocialNetwork {
 
 model User {
   userId            Int                 @id @default(autoincrement()) @map("user_id")
-  roleId            Int                 @map("role_id")
-  firstName         String              @map("first_name")
-  lastName          String              @map("last_name")
+  nickname          String              @unique @map("user_nickname")
+  firstName         String?             @map("first_name")
+  lastName          String?             @map("last_name")
   email             String
   password          String
-  banned            Boolean
+  banned            Boolean             @default(false)
   roleUser          RoleUser[]
   userSocialNetwork UserSocialNetwork[]
   userPost          UserPost[]
@@ -35,10 +35,10 @@ model User {
 }
 
 model RoleUser {
-  roleId Int  @map("role_id")
-  userId Int  @map("user_id")
-  Role   Role @relation(fields: [roleId], references: [roleId])
-  User   User @relation(fields: [userId], references: [userId])
+  roleId String @map("role_id")
+  userId Int    @map("user_id")
+  Role   Role   @relation(fields: [roleId], references: [roleId])
+  User   User   @relation(fields: [userId], references: [userId])
 
   @@id([roleId, userId])
 }
