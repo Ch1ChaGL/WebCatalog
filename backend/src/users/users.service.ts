@@ -3,6 +3,8 @@ import { UserCreateDto } from './dto/user.create.dto';
 import { RoleUser, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { hash } from 'argon2';
+import { BanToggleDto } from './dto/user.banToggle.dto';
+import { UserUpdateDto } from './dto/user.update.dto';
 
 type UserWithoutPassword = Omit<User, 'password'> & { roles: string[] };
 
@@ -109,5 +111,101 @@ export class UsersService {
     });
 
     return deletedUser ? true : false;
+  }
+
+  async toggleBan(userId: number, banData: BanToggleDto): Promise<Boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('пользователя с таким id не существует');
+    }
+
+    await this.prisma.user.update({
+      where: { userId: userId },
+      data: {
+        banned: banData.banned,
+        banReason: banData.reason ? banData.reason : null,
+      },
+    });
+
+    return true;
+  }
+
+  async updateUser(userId: number, userData: UserUpdateDto): Promise<boolean> {
+    const { roles, ...user } = userData;
+
+    await this.prisma.roleUser.deleteMany({
+      where: {
+        userId: userId,
+      },
+    });
+
+    Promise.all(
+      roles.map(role =>
+        this.prisma.roleUser.create({
+          data: {
+            roleId: role,
+            userId: userId,
+          },
+        }),
+      ),
+    );
+
+    const hashedPassword = await hash(userData.password);
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        ...user,
+        password: hashedPassword,
+      },
+    });
+
+    return !!updatedUser;
+  }
+
+  async partialUpdateUser(
+    userId: number,
+    partialUserData: Partial<UserUpdateDto>,
+  ): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    if (!user)
+      throw new BadRequestException(`Пользователь с ID ${userId} не найден`);
+
+    if (partialUserData.nickname) {
+      const hasUser = await this.prisma.user.findUnique({
+        where: { nickname: partialUserData.nickname },
+      });
+
+      if (hasUser)
+        throw new BadRequestException(
+          'Пользователь с таким nickname уже существует',
+        );
+    }
+
+    const hashedPassword = await hash(user.password);
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        ...partialUserData,
+        password: hashedPassword ? hashedPassword : user.password,
+      },
+    });
+
+    return !!updatedUser;
   }
 }
