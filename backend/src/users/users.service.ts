@@ -5,19 +5,19 @@ import { PrismaService } from 'src/prisma.service';
 import { hash } from 'argon2';
 import { BanToggleDto } from './dto/user.banToggle.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
+import { RoleService } from 'src/role/role.service';
 
 type UserWithoutPassword = Omit<User, 'password'> & { roles: string[] };
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private roleService: RoleService,
+  ) {}
 
-  private async getUserRoles(userId: number): Promise<string[]> {
-    const userRoles: RoleUser[] = await this.prisma.roleUser.findMany({
-      where: {
-        userId,
-      },
-    });
+  async getUserRoles(userId: number): Promise<string[]> {
+    const userRoles: RoleUser[] = await this.roleService.getUserRoles(userId);
 
     return userRoles.map(userRole => userRole.roleId);
   }
