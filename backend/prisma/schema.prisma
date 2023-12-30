@@ -16,6 +16,7 @@ model Role {
 model SocialNetwork {
   socialNetworkId   Int                 @id @default(autoincrement()) @map("social_network_id")
   socialNetworkName String              @map("social_network_name")
+  iconPath          String              @map("social_network_icon_path")
   userSocialNetwork UserSocialNetwork[]
 }
 
@@ -79,6 +80,7 @@ model Post {
   postImage    PostImage[]
   comment      Comment[]
   rating       Rating[]
+  link         String
 }
 
 model UserPost {
