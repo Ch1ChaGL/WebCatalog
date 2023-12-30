@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryModule } from './category/category.module';
 import { PostModule } from './post/post.module';
 import { RatingModule } from './rating/rating.module';
+import { CommentModule } from './comment/comment.module';
 import * as path from 'path';
 
 @Module({
@@ -22,6 +23,7 @@ import * as path from 'path';
     CategoryModule,
     PostModule,
     RatingModule,
+    CommentModule,
   ],
   controllers: [],
   providers: [PrismaService],
