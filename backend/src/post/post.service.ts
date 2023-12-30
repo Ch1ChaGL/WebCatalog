@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PostCreateDto } from './dto/post.create.dto';
 import { PrismaService } from 'src/prisma.service';
 import { FileService } from 'src/file/file.service';
 import { FormatFile } from 'src/const/formatFile.const';
+import { BanToggleDto } from './dto/post.banToggle.dto';
+import { PostUpdateDto } from './dto/post.update.dto';
 
 @Injectable()
 export class PostService {
@@ -83,4 +85,61 @@ export class PostService {
         };
       });
   }
+
+  async getAllPost(): Promise<PostCreateDto[] | null> {
+    return await this.prisma.post
+      .findMany({
+        include: {
+          categoryPost: {
+            select: {
+              categoryId: true,
+            },
+          },
+          postImage: true,
+        },
+      })
+      .then(posts =>
+        Promise.all(
+          posts.map(async post => {
+            const { categoryPost, ...rest } = post;
+
+            const userPost = await this.prisma.userPost.findFirst({
+              where: { postId: rest.postId },
+            });
+
+            return {
+              ...rest,
+              categoryIds: post.categoryPost.map(
+                category => category.categoryId,
+              ),
+              userId: userPost.userId,
+            };
+          }),
+        ),
+      );
+  }
+
+  async toggleBan(postId: number, banData: BanToggleDto): Promise<Boolean> {
+    const post = await this.prisma.post.findUnique({
+      where: {
+        postId: postId,
+      },
+    });
+
+    if (!post) {
+      throw new BadRequestException('Поста с таким id не существует');
+    }
+
+    await this.prisma.post.update({
+      where: { postId: postId },
+      data: {
+        banned: banData.banned,
+        banReason: banData.reason ? banData.reason : null,
+      },
+    });
+
+    return true;
+  }
+
+  async updatePost(postId: number, dto: PostUpdateDto, images: any[]) {}
 }
