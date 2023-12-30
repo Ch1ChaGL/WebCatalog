@@ -9,7 +9,7 @@ export class FileService {
   async createFile(file: any): Promise<string> {
     try {
       const fileName = uuid.v4() + '.svg';
-      const filePath = path.resolve(__dirname, '..', 'static');
+      const filePath = path.resolve(__dirname, '..', '..', 'static');
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath, { recursive: true });
       }

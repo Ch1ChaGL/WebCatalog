@@ -97,6 +97,9 @@ export class SocialNetworkService {
     });
   }
 
+  async getAllSocialNetwork(): Promise<SocialNetwork[]> {
+    return await this.prisma.socialNetwork.findMany();
+  }
   async createSocialNetwork(
     socialNetwork: CreateSocialNetworkDto,
     icon: any,
