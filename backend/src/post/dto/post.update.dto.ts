@@ -3,4 +3,5 @@ export class PostUpdateDto {
   description?: string;
   link?: string;
   categoryIds?: number[];
+  imagesDelete?: boolean;
 }

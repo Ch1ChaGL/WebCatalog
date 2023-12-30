@@ -7,6 +7,7 @@ import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CategoryModule } from './category/category.module';
 import { PostModule } from './post/post.module';
+import { RatingModule } from './rating/rating.module';
 import * as path from 'path';
 
 @Module({
@@ -20,6 +21,7 @@ import * as path from 'path';
     }),
     CategoryModule,
     PostModule,
+    RatingModule,
   ],
   controllers: [],
   providers: [PrismaService],

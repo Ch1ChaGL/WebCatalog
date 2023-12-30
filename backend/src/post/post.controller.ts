@@ -9,6 +9,8 @@ import {
   Post,
   UploadedFiles,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostCreateDto } from './dto/post.create.dto';
@@ -21,6 +23,7 @@ import { PostUpdateDto } from './dto/post.update.dto';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('create')
   @UseInterceptors(FilesInterceptor('images'))
@@ -52,13 +55,17 @@ export class PostController {
 
   @HttpCode(200)
   @UseInterceptors(FilesInterceptor('images'))
-  @Patch(':id')
+  @Patch('update/:id')
   async updatePost(
     @Param('id') postId,
     @Body() dto: PostUpdateDto,
     @UploadedFiles() images,
   ) {
-    
+    dto.categoryIds = JSON.parse(
+      dto.categoryIds ? dto.categoryIds.toString() : null,
+    );
     return await this.postService.updatePost(+postId, dto, images);
   }
+
+  //TODO удаление поста
 }

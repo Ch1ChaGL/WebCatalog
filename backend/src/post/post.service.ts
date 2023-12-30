@@ -61,6 +61,9 @@ export class PostService {
       where: { postId: postId },
     });
 
+    if (!userPost)
+      throw new BadRequestException('Поста с таким id не существует');
+
     return await this.prisma.post
       .findFirst({
         where: {
@@ -141,5 +144,78 @@ export class PostService {
     return true;
   }
 
-  async updatePost(postId: number, dto: PostUpdateDto, images: any[]) {}
+  async updatePost(postId: number, dto: PostUpdateDto, images: any[]) {
+    const { categoryIds, imagesDelete, ...updatedData } = dto;
+
+    const updatedPost = await this.prisma.post.update({
+      where: { postId },
+      data: {
+        ...updatedData,
+      },
+    });
+
+    if (categoryIds) {
+      await this.prisma.categoryPost.deleteMany({
+        where: {
+          postId,
+        },
+      });
+
+      Promise.all(
+        categoryIds.map(categoryId =>
+          this.prisma.categoryPost.create({
+            data: {
+              categoryId: categoryId,
+              postId: postId,
+            },
+          }),
+        ),
+      );
+    }
+
+    if (images?.length > 0) {
+      const oldImages = await this.prisma.postImage.findMany({
+        where: {
+          postId,
+        },
+      });
+
+      oldImages.forEach(
+        async oldImage => await this.fileService.deleteFile(oldImage.filePath),
+      );
+
+      await this.prisma.postImage.deleteMany({
+        where: {
+          postId: postId,
+        },
+      });
+
+      images.forEach(async (image, index) => {
+        await this.prisma.postImage.create({
+          data: {
+            order: index + 1,
+            postId: postId,
+            filePath: await this.fileService.createFile(image, FormatFile.JPG),
+          },
+        });
+      });
+    }
+    if (imagesDelete) {
+      const oldImages = await this.prisma.postImage.findMany({
+        where: {
+          postId,
+        },
+      });
+
+      oldImages.forEach(
+        async oldImage => await this.fileService.deleteFile(oldImage.filePath),
+      );
+
+      await this.prisma.postImage.deleteMany({
+        where: {
+          postId: postId,
+        },
+      });
+    }
+  }
 }
