@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { SocialNetworkModule } from './social-network/social-network.module';
 import { FileModule } from './file/file.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { CategoryModule } from './category/category.module';
+import { PostModule } from './post/post.module';
 import * as path from 'path';
 
 @Module({
@@ -16,6 +18,8 @@ import * as path from 'path';
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, '..', 'static'),
     }),
+    CategoryModule,
+    PostModule,
   ],
   controllers: [],
   providers: [PrismaService],

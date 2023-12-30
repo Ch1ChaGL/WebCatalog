@@ -74,6 +74,7 @@ model Post {
   postId       Int            @id @default(autoincrement()) @map("post_id")
   postName     String         @map("post_name")
   banned       Boolean
+  banReason    String?        @map("ban_reason")
   description  String
   categoryPost CategoryPost[]
   userPost     UserPost[]
@@ -92,20 +93,12 @@ model UserPost {
   @@id([postId, userId])
 }
 
-model Images {
-  imageId   Int         @id @default(autoincrement()) @map("image_id")
-  filePath  String      @map("file_path")
-  postImage PostImage[]
-}
-
 model PostImage {
-  postId  Int    @map("post_id")
-  imageId Int    @map("image_id")
-  order   Int
-  Post    Post   @relation(fields: [postId], references: [postId])
-  Images  Images @relation(fields: [imageId], references: [imageId])
-
-  @@id([postId, imageId])
+  postImageId Int    @id @default(autoincrement()) @map("post_image_id")
+  postId      Int    @map("post_id")
+  filePath    String @map("file_path")
+  order       Int
+  Post        Post   @relation(fields: [postId], references: [postId])
 }
 
 model Comment {

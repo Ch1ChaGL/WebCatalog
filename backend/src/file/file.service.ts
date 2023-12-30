@@ -6,9 +6,9 @@ import * as uuid from 'uuid';
 @Injectable()
 export class FileService {
   constructor() {}
-  async createFile(file: any): Promise<string> {
+  async createFile(file: any, format: string): Promise<string> {
     try {
-      const fileName = uuid.v4() + '.svg';
+      const fileName = uuid.v4() + format;
       const filePath = path.resolve(__dirname, '..', '..', 'static');
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath, { recursive: true });

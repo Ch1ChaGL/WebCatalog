@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { CreateSocialNetworkDto } from './dto/social-network.create.dto';
 import { FileService } from 'src/file/file.service';
+import { FormatFile } from 'src/const/formatFile.const';
 
 type UserSocial = {
   name: string;
@@ -107,7 +108,7 @@ export class SocialNetworkService {
     const createdSocialNetwork = await this.prisma.socialNetwork.create({
       data: {
         socialNetworkName: socialNetwork.socialNetworkName,
-        iconPath: await this.fileService.createFile(icon),
+        iconPath: await this.fileService.createFile(icon, FormatFile.SVG),
       },
     });
 
