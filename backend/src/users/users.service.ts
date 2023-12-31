@@ -25,7 +25,7 @@ export class UsersService {
   async createUser(dto: UserCreateDto): Promise<UserWithoutPassword> | null {
     const { roles, ...userData } = dto;
 
-    const oldUser = await this.prisma.user.findFirst({
+    let oldUser = await this.prisma.user.findFirst({
       where: {
         email: dto.email,
       },
@@ -35,6 +35,18 @@ export class UsersService {
       throw new BadRequestException({
         message:
           'Пользователь с таким email уже зарегестрирован. Попробуйте снова, используя другой email',
+      });
+
+    oldUser = await this.prisma.user.findFirst({
+      where: {
+        nickname: dto.nickname,
+      },
+    });
+
+    if (oldUser)
+      throw new BadRequestException({
+        message:
+          'Пользователь с таким ником уже зарегестрирован. Попробуйте снова, используя другой никнейм',
       });
 
     const hashedPassword = await hash(userData.password);
@@ -84,12 +96,25 @@ export class UsersService {
   async getUserById(userId: number): Promise<UserWithoutPassword> | null {
     const getedUser = await this.prisma.user.findUnique({
       where: {
-        userId: +userId,
+        userId: userId,
       },
     });
     const { password, ...user } = getedUser;
 
     return { ...user, roles: await this.getUserRoles(user.userId) };
+  }
+
+  async getUserByIdWithPassword(userId: number) {
+    const getedUser = await this.prisma.user.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return {
+      ...getedUser,
+      roles: await this.getUserRoles(getedUser.userId),
+    };
   }
 
   async deleteUserById(userId: number): Promise<Boolean> {
@@ -207,5 +232,9 @@ export class UsersService {
     });
 
     return !!updatedUser;
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return await this.prisma.user.findFirst({ where: { email: email } });
   }
 }

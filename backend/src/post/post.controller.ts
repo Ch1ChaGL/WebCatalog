@@ -18,6 +18,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from 'src/decorators/user.decotators';
 import { BanToggleDto } from './dto/post.banToggle.dto';
 import { PostUpdateDto } from './dto/post.update.dto';
+import { Auth } from 'src/decorators/auth.decorators';
 
 @Controller('post')
 export class PostController {
@@ -25,6 +26,7 @@ export class PostController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
+  @Auth()
   @Post('create')
   @UseInterceptors(FilesInterceptor('images'))
   async createPost(@Body() dto: PostCreateDto, @UploadedFiles() images: any[]) {
@@ -36,7 +38,7 @@ export class PostController {
     return await this.postService.createPost(dto, dto.userId, images);
   }
 
-  @Get('post/:id')
+  @Get(':id')
   async getPostById(@Param('id') postId) {
     return await this.postService.getPostById(+postId);
   }

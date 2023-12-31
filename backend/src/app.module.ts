@@ -9,6 +9,7 @@ import { CategoryModule } from './category/category.module';
 import { PostModule } from './post/post.module';
 import { RatingModule } from './rating/rating.module';
 import { CommentModule } from './comment/comment.module';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path';
 
 @Module({
@@ -24,6 +25,7 @@ import * as path from 'path';
     PostModule,
     RatingModule,
     CommentModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [PrismaService],
