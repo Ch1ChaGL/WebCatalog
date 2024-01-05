@@ -29,5 +29,5 @@ export interface IRegisterData {
 }
 
 export interface IAuthResponse extends IToken {
-  user: IUser;
+  user?: IUser;
 }

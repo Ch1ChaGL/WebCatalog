@@ -43,14 +43,14 @@ export class PostController {
     return await this.postService.getPostById(+postId);
   }
 
-  @Get('all')
+  @Get('')
   async getAllPost() {
     return await this.postService.getAllPost();
   }
 
   @HttpCode(200)
   @Patch('toggleBan/:id')
-  async banUser(@Param('id') postId, @Body() banData: BanToggleDto) {
+  async banPost(@Param('id') postId, @Body() banData: BanToggleDto) {
     if (!postId) throw new BadRequestException('id пользователя не указано');
     return await this.postService.toggleBan(+postId, banData);
   }

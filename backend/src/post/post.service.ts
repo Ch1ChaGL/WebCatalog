@@ -1,23 +1,25 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PostCreateDto } from './dto/post.create.dto';
+import { CreatedPost, PostCreateDto } from './dto/post.create.dto';
 import { PrismaService } from 'src/prisma.service';
 import { FileService } from 'src/file/file.service';
 import { FormatFile } from 'src/const/formatFile.const';
 import { BanToggleDto } from './dto/post.banToggle.dto';
 import { PostUpdateDto } from './dto/post.update.dto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PostService {
   constructor(
     private prisma: PrismaService,
     private fileService: FileService,
+    private userService: UsersService,
   ) {}
 
   async createPost(
     dto: PostCreateDto,
     userIdn: number,
     images: any[],
-  ): Promise<PostCreateDto> {
+  ): Promise<CreatedPost> {
     const { categoryIds, userId, ...createPostData } = dto;
 
     const createdPost = await this.prisma.post.create({
@@ -53,12 +55,18 @@ export class PostService {
       });
     });
 
-    return this.getPostById(createdPost.postId);
+    const post = await this.getPostById(createdPost.postId);
+    return {
+      ...post,
+      user: await this.userService.getUserById(userId),
+    };
   }
 
-  async getPostById(postId: number): Promise<PostCreateDto> {
+  async getPostById(postId: number): Promise<CreatedPost> {
     const userPost = await this.prisma.userPost.findFirst({
-      where: { postId: postId },
+      where: {
+        postId,
+      },
     });
 
     if (!userPost)
@@ -78,20 +86,20 @@ export class PostService {
           postImage: true,
         },
       })
-      .then(post => {
+      .then(async post => {
         const { categoryPost, ...rest } = post;
 
         return {
           ...rest,
           categoryIds: post.categoryPost.map(category => category.categoryId),
-          userId: userPost.userId,
+          user: await this.userService.getUserById(userPost.userId),
         };
       });
   }
 
-  async getAllPost(): Promise<PostCreateDto[] | null> {
-    return await this.prisma.post
-      .findMany({
+  async getAllPost(): Promise<CreatedPost[] | null> {
+    try {
+      const posts = await this.prisma.post.findMany({
         include: {
           categoryPost: {
             select: {
@@ -100,26 +108,31 @@ export class PostService {
           },
           postImage: true,
         },
-      })
-      .then(posts =>
-        Promise.all(
-          posts.map(async post => {
-            const { categoryPost, ...rest } = post;
+      });
 
-            const userPost = await this.prisma.userPost.findFirst({
-              where: { postId: rest.postId },
-            });
+      const formattedPosts = await Promise.all(
+        posts.map(async post => {
+          const { categoryPost, ...rest } = post;
 
-            return {
-              ...rest,
-              categoryIds: post.categoryPost.map(
-                category => category.categoryId,
-              ),
-              userId: userPost.userId,
-            };
-          }),
-        ),
+          const userPost = await this.prisma.userPost.findFirst({
+            where: { postId: rest.postId },
+          });
+
+          const user = await this.userService.getUserById(userPost.userId);
+
+          return {
+            ...rest,
+            categoryIds: post.categoryPost.map(category => category.categoryId),
+            user: user,
+          };
+        }),
       );
+
+      return formattedPosts;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      return null;
+    }
   }
 
   async toggleBan(postId: number, banData: BanToggleDto): Promise<Boolean> {
@@ -217,5 +230,7 @@ export class PostService {
         },
       });
     }
+
+    return await this.getPostById(postId);
   }
 }

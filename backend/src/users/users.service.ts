@@ -1,13 +1,23 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserCreateDto } from './dto/user.create.dto';
-import { RoleUser, User } from '@prisma/client';
+import { RoleUser, User, UserSocialNetwork } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { hash } from 'argon2';
 import { BanToggleDto } from './dto/user.banToggle.dto';
 import { UserUpdateDto } from './dto/user.update.dto';
 import { RoleService } from 'src/role/role.service';
 
-type UserWithoutPassword = Omit<User, 'password'> & { roles: string[] };
+export interface UserWithoutPassword extends Omit<User, 'password'> {
+  roles: string[];
+  socialNetwork: ISocialNetwork[];
+}
+
+export interface ISocialNetwork {
+  link: string;
+  socialNetworkId: number;
+  socialNetworkName: string;
+  iconPath: string;
+}
 
 @Injectable()
 export class UsersService {
@@ -77,6 +87,7 @@ export class UsersService {
     return {
       ...userWithoutPassword,
       roles: await this.getUserRoles(createdUser.userId),
+      socialNetwork: await this.getUserSocialNetwork(createdUser.userId),
     };
   }
 
@@ -87,12 +98,28 @@ export class UsersService {
       getedUsers.map(async ({ password, ...user }) => ({
         ...user,
         roles: await this.getUserRoles(user.userId),
+        socialNetwork: await this.getUserSocialNetwork(user.userId),
       })),
     );
 
     return users;
   }
 
+  async getUserSocialNetwork(userId: number) {
+    const userSocialNetworks = await this.prisma.userSocialNetwork.findMany({
+      where: { userId: userId },
+      include: { SocialNetwork: true },
+    });
+
+    const formattedUserSocialNetworks = userSocialNetworks.map(
+      ({ userId, link, SocialNetwork }) => ({
+        link,
+        ...SocialNetwork,
+      }),
+    );
+
+    return formattedUserSocialNetworks;
+  }
   async getUserById(userId: number): Promise<UserWithoutPassword> | null {
     const getedUser = await this.prisma.user.findUnique({
       where: {
@@ -101,7 +128,11 @@ export class UsersService {
     });
     const { password, ...user } = getedUser;
 
-    return { ...user, roles: await this.getUserRoles(user.userId) };
+    return {
+      ...user,
+      roles: await this.getUserRoles(user.userId),
+      socialNetwork: await this.getUserSocialNetwork(userId),
+    };
   }
 
   async getUserByIdWithPassword(userId: number) {

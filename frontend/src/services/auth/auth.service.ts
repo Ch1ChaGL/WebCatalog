@@ -1,16 +1,15 @@
+import { AuthEndPoint } from './auth.config';
 import { IRegisterData, ILoginData } from './../../store/user/user.interface';
-import { getContentType } from '@/app/api/api.helper';
 import { IAuthResponse } from '@/store/user/user.interface';
-import axios from 'axios';
 import { saveToStorage } from './auth.helper';
+import { instance } from '@/app/api/api.interceptors';
+import { HttpMethods, createRequestConfig } from '../service.config';
 
 export const AuthService = {
-  async main(type: 'login' | 'registration', data: ILoginData | IRegisterData) {
-    const response = await axios<IAuthResponse>({
-      url: `/auth/${type}`,
-      method: 'POST',
-      data,
-    });
+  async main(type: AuthEndPoint, data: ILoginData | IRegisterData) {
+    const response = await instance<IAuthResponse>(
+      createRequestConfig(HttpMethods.POST, type, data),
+    );
 
     if (response.data.accessToken) saveToStorage(response.data);
 
@@ -18,9 +17,8 @@ export const AuthService = {
   },
 
   async getNewToken() {
-    const response = await axios.get<string, { data: IAuthResponse }>(
-      process.env.API_URL + 'auth/check',
-      { headers: getContentType() },
+    const response = await instance<IAuthResponse>(
+      createRequestConfig(HttpMethods.GET, AuthEndPoint.Chek),
     );
 
     if (response.data.accessToken) saveToStorage(response.data);

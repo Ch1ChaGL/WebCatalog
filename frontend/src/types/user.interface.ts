@@ -1,3 +1,5 @@
+import { ISocialNetwork } from "./socialNetwork.interface";
+
 export interface IUser {
   userId: number;
   nickname: string;
@@ -7,4 +9,5 @@ export interface IUser {
   banned: boolean;
   banReason: string;
   roles: string[];
+  socialNetwork: ISocialNetwork[];
 }
