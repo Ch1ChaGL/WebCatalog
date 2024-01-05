@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { RateDto } from './dto/rating.rate.dto';
 import { PostService } from 'src/post/post.service';
@@ -7,6 +12,7 @@ import { PostService } from 'src/post/post.service';
 export class RatingService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => PostService))
     private postService: PostService,
   ) {}
 
@@ -47,12 +53,13 @@ export class RatingService {
   }
 
   async getRate(postId: number): Promise<number> {
-    const post = await this.postService.getPostById(postId);
     const rating = await this.prisma.rating.findMany({
       where: {
         postId: postId,
       },
     });
+
+    if (rating.length === 0) return 0;
 
     const sum = rating.reduce((prev, cur) => cur.rating + prev, 0);
     return Number((sum / rating.length).toFixed(2));

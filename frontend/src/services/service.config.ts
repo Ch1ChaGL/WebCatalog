@@ -4,6 +4,8 @@ import { CategoryEndPoint } from './category/category.config';
 import { getContentType } from '@/app/api/api.helper';
 import { CommentEndPoint } from './comment/comment.config';
 import { PostEndPoint } from './post/post.config';
+import { RatingEndPoint } from './rating/rating.config';
+import { UserEndPoint } from './user/user.config';
 
 export enum HttpMethods {
   GET = 'GET',
@@ -17,7 +19,9 @@ type typeEndPoint =
   | CategoryEndPoint
   | AuthEndPoint
   | CommentEndPoint
-  | PostEndPoint;
+  | PostEndPoint
+  | RatingEndPoint
+  | UserEndPoint;
 
 export const createRequestConfig = (
   method: HttpMethods,

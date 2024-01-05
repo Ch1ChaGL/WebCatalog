@@ -229,7 +229,7 @@ export class UsersService {
   async partialUpdateUser(
     userId: number,
     partialUserData: Partial<UserUpdateDto>,
-  ): Promise<boolean> {
+  ) {
     const user = await this.prisma.user.findUnique({
       where: {
         userId: userId,
@@ -252,7 +252,7 @@ export class UsersService {
 
     const hashedPassword = await hash(user.password);
 
-    const updatedUser = await this.prisma.user.update({
+    await this.prisma.user.update({
       where: {
         userId: userId,
       },
@@ -262,7 +262,7 @@ export class UsersService {
       },
     });
 
-    return !!updatedUser;
+    return await this.getUserById(userId);
   }
 
   async getUserByEmail(email: string): Promise<User> {

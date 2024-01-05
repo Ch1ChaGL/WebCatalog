@@ -10,6 +10,7 @@ export interface IPost {
   postImage: IPostImage[];
   categoryIds: number[];
   user: IUser;
+  rating: number;
 }
 
 export interface IPostImage {
@@ -18,4 +19,3 @@ export interface IPostImage {
   filePath: string;
   order: number;
 }
-

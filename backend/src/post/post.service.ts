@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { CreatedPost, PostCreateDto } from './dto/post.create.dto';
 import { PrismaService } from 'src/prisma.service';
 import { FileService } from 'src/file/file.service';
@@ -6,6 +11,7 @@ import { FormatFile } from 'src/const/formatFile.const';
 import { BanToggleDto } from './dto/post.banToggle.dto';
 import { PostUpdateDto } from './dto/post.update.dto';
 import { UsersService } from 'src/users/users.service';
+import { RatingService } from 'src/rating/rating.service';
 
 @Injectable()
 export class PostService {
@@ -13,6 +19,8 @@ export class PostService {
     private prisma: PrismaService,
     private fileService: FileService,
     private userService: UsersService,
+    @Inject(forwardRef(() => RatingService))
+    private ratingService: RatingService,
   ) {}
 
   async createPost(
@@ -59,6 +67,7 @@ export class PostService {
     return {
       ...post,
       user: await this.userService.getUserById(userId),
+      rating: 0,
     };
   }
 
@@ -89,10 +98,13 @@ export class PostService {
       .then(async post => {
         const { categoryPost, ...rest } = post;
 
+        console.log(post.postId);
+
         return {
           ...rest,
           categoryIds: post.categoryPost.map(category => category.categoryId),
           user: await this.userService.getUserById(userPost.userId),
+          rating: await this.ratingService.getRate(post.postId),
         };
       });
   }
@@ -124,6 +136,7 @@ export class PostService {
             ...rest,
             categoryIds: post.categoryPost.map(category => category.categoryId),
             user: user,
+            rating: await this.ratingService.getRate(post.postId),
           };
         }),
       );

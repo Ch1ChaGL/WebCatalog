@@ -18,4 +18,5 @@ export class CreatedPost {
   link: string;
   categoryIds: number[];
   user: UserWithoutPassword;
+  rating: number;
 }

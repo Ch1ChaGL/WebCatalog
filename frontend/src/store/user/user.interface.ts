@@ -31,3 +31,12 @@ export interface IRegisterData {
 export interface IAuthResponse extends IToken {
   user?: IUser;
 }
+
+export interface IUserUpdate {
+  nickname?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  banned?: boolean;
+  password?: string;
+}
