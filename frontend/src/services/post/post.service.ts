@@ -1,5 +1,5 @@
 import { IPost } from './../../types/post.interface';
-import { IPostCreate, PostUpdate } from './../../store/post/post.interface';
+import { IPostCreate, PostUpdate } from './post.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';
 import { PostEndPoint } from './post.config';

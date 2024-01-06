@@ -1,5 +1,5 @@
 import { IComment } from './../../types/comment.interface';
-import { ICommentCreateRequest } from './../../store/comment/comment.interface';
+import { ICommentCreateRequest } from './comment.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';
 import { CommentEndPoint } from './comment.config';

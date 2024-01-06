@@ -33,7 +33,13 @@ export class AuthService {
       );
 
     const createdUser = await this.userService.createUser(dto);
-    return await this.generateToken(createdUser);
+
+    const token = await this.generateToken(createdUser);
+
+    return {
+      user: { ...createdUser },
+      ...token,
+    };
   }
 
   async login(dto: LoginDto) {
@@ -43,7 +49,11 @@ export class AuthService {
 
     const user = await this.validateUser(dto);
 
-    return await this.generateToken(user);
+    const token = await this.generateToken(user);
+    return {
+      user: { ...user },
+      ...token,
+    };
   }
 
   private async validateUser(dto: LoginDto) {

@@ -1,4 +1,4 @@
-import { IUserUpdate } from './../../store/user/user.interface';
+import { IUserUpdate } from '../../store/user/user.interface';
 import { Ban } from './../../types/ban.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';

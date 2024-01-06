@@ -98,8 +98,6 @@ export class PostService {
       .then(async post => {
         const { categoryPost, ...rest } = post;
 
-        console.log(post.postId);
-
         return {
           ...rest,
           categoryIds: post.categoryPost.map(category => category.categoryId),

@@ -1,8 +1,6 @@
 import { IUser } from '@/types/user.interface';
 
-export interface IUserState {
-  email: string;
-}
+export interface IUserState extends IUser {}
 
 export interface IToken {
   accessToken: string;
@@ -29,7 +27,7 @@ export interface IRegisterData {
 }
 
 export interface IAuthResponse extends IToken {
-  user?: IUser;
+  user: IUser;
 }
 
 export interface IUserUpdate {

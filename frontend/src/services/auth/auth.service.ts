@@ -1,5 +1,5 @@
 import { AuthEndPoint } from './auth.config';
-import { IRegisterData, ILoginData } from './../../store/user/user.interface';
+import { IRegisterData, ILoginData } from '../../store/user/user.interface';
 import { IAuthResponse } from '@/store/user/user.interface';
 import { saveToStorage } from './auth.helper';
 import { instance } from '@/app/api/api.interceptors';
@@ -13,7 +13,7 @@ export const AuthService = {
 
     if (response.data.accessToken) saveToStorage(response.data);
 
-    response.data;
+    return response.data;
   },
 
   async getNewToken() {

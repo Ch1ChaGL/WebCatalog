@@ -111,11 +111,11 @@ model Comment {
 }
 
 model Rating {
-  userId Int  @map("user_id")
-  postId Int  @map("post_id")
-  rating Int
-  User   User @relation(fields: [userId], references: [userId])
-  Post   Post @relation(fields: [postId], references: [postId])
+  userId Int   @map("user_id")
+  postId Int   @map("post_id")
+  rating Float
+  User   User  @relation(fields: [userId], references: [userId])
+  Post   Post  @relation(fields: [postId], references: [postId])
 
   @@id([userId, postId])
 }

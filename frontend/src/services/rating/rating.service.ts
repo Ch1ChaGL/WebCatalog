@@ -1,4 +1,4 @@
-import { IRate } from './../../store/rating/rating.interface';
+import { IRate } from './rating.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';
 import { RatingEndPoint } from './rating.config';

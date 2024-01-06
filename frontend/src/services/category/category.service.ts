@@ -1,7 +1,7 @@
 import {
   ICategoryCreate,
   ICategoryResponse,
-} from '../../store/category/category.interface';
+} from './category.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';
 import { CategoryEndPoint } from './category.config';
