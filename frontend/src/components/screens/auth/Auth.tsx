@@ -5,5 +5,5 @@ interface IAuth {
 }
 
 export default function Auth({ type }: IAuth) {
-  return <div>Auth</div>;
+  return <div title='Auth'>Auth</div>;
 }

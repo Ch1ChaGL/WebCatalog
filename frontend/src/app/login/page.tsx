@@ -5,6 +5,12 @@ export const methadata: Metadata = {
   title: 'Login',
 };
 
-export default function LoginPage() {
-  return <Auth type='login' />;
-}
+const LoginPage = () => {
+  return (
+    <div>
+      <Auth type='login' />
+    </div>
+  );
+};
+
+export default LoginPage;
