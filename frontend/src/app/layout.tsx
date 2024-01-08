@@ -4,11 +4,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
-import { persistor, store } from '@/store';
-import { PersistGate } from 'redux-persist/integration/react';
 import AuthProvider from '@/providers/auth-provider/AuthProvider';
 import { TypeComponentAuthFields } from '@/providers/auth-provider/auth-page.types';
 import { AppProps } from 'next/app';
+import { store } from '@/store';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +27,7 @@ const quertClient = new QueryClient({
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactElement;
 }) {
   return (
     <html lang='en'>

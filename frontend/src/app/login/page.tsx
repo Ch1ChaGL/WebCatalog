@@ -6,6 +6,7 @@ export const methadata: Metadata = {
 };
 
 const LoginPage = () => {
+
   return (
     <div>
       <Auth type='login' />
