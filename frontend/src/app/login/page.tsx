@@ -9,7 +9,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <Auth type='login' />
+      <Auth />
     </div>
   );
 };

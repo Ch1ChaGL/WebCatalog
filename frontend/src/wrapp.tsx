@@ -1,3 +1,4 @@
+'use client';
 // withAuth.tsx
 import { redirect, useRouter } from 'next/navigation';
 import { useTypedSelector } from './hooks/useTypedSelector';
@@ -13,7 +14,8 @@ const withAuth = (WrappedComponent, allowedRoles = []) => {
 
     // Если пользователь не аутентифицирован, перенаправьте на страницу входа
     if (!user) {
-      redirect('/'); // или редирект на страницу входа
+      redirect('/login'); // или редирект на страницу входа
+      // return null;
     }
 
     // Если пользователь не имеет правильной роли, не рендерить обернутый компонент
