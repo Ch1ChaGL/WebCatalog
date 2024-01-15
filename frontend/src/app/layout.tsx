@@ -1,15 +1,10 @@
 'use client';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
-import AuthProvider from '@/providers/auth-provider/AuthProvider';
-import { TypeComponentAuthFields } from '@/providers/auth-provider/auth-page.types';
-import { AppProps } from 'next/app';
 import { store } from '@/store';
-
-const inter = Inter({ subsets: ['latin'] });
+import HeaderComponent from '@/components/ui/Header/Header.component';
+import FooterComponent from '@/components/ui/Footer/Footer.component';
 
 // export const metadata: Metadata = {
 //   title: 'Create Next App',
@@ -31,8 +26,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
-        <Provider store={store}>{children}</Provider>
+      <body>
+        <HeaderComponent />
+        <div className='wrapper'>
+          <div className='main'>
+            <div className='container'>
+              <Provider store={store}>{children}</Provider>
+            </div>
+          </div>
+        </div>
+        <FooterComponent />
       </body>
     </html>
   );

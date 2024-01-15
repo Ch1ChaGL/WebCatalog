@@ -1,0 +1,18 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 10px;
+  /* Фон навбара */
+}
+.logo {
+  font-size: 24px;
+}
+.logo__title {
+  color: var(--primary-pink);
+}
+
+.buttons {
+  display: flex;
+  gap: 20px; /* Промежуток между кнопками */
+}

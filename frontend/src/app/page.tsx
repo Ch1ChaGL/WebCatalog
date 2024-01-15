@@ -1,9 +1,5 @@
-'use client';
-import Image from 'next/image';
-import styles from './page.module.css';
-import withAuth from '@/wrapp';
 import HomePage from '@/components/screens/home/HomePage';
-
+import './globals.css';
 function Home() {
   return <HomePage />;
 }

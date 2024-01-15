@@ -1,7 +1,9 @@
-import withAuth from '@/wrapp';
-
 function HomePage() {
-  return <div title='Auth'>Home</div>;
+  return (
+    <div title='Auth'>
+      Home ajdhakshdkjashdkjahdkjahdkjhaskdhakhdkajhdkahdkjha
+    </div>
+  );
 }
 
-export default withAuth(HomePage);
+export default HomePage;
