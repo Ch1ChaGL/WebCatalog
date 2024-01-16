@@ -4,14 +4,17 @@ import { GetServerSideProps, NextPage } from 'next';
 import { FC } from 'react';
 
 const HomePage: FC<IHomePageData> = ({ posts }) => {
-  console.log(posts);
-  return <div>Home ajdhakshdkjashdkjahdkjahdkjhaskdhakhdkajhdkahdkjha</div>;
+  return (
+    <>
+      {posts.map(post => (
+        <div>{post.postName} {post.description}</div>
+      ))}
+    </>
+  );
 };
 
 export interface IHomePageData {
   posts: IPost[];
 }
-
-
 
 export default HomePage;
