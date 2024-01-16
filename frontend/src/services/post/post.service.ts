@@ -52,6 +52,7 @@ export const PostService = {
       createRequestConfig(HttpMethods.GET, PostEndPoint.GET_ALL_POSTS),
     );
 
+    console.log(response);
     return response.data;
   },
 

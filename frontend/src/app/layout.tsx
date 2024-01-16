@@ -14,7 +14,7 @@ import FooterComponent from '@/components/ui/Footer/Footer.component';
 const quertClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
     },
   },
 });
@@ -31,7 +31,9 @@ export default function RootLayout({
         <div className='wrapper'>
           <div className='main'>
             <div className='container'>
-              <Provider store={store}>{children}</Provider>
+              <QueryClientProvider client={quertClient}>
+                <Provider store={store}>{children}</Provider>
+              </QueryClientProvider>
             </div>
           </div>
         </div>
