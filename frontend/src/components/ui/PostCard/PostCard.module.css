@@ -1,0 +1,30 @@
+.PostCard {
+  border: 1px solid #bbb;
+  border-radius: 12px;
+  padding: 20px 10px;
+  font-family: 'Barlow', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.PostCard:hover {
+  background-color: #f0f0f0; /* Изменение цвета фона при наведении */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Небольшая тень при наведении */
+  transform: scale(1.05); /* Увеличение размера при наведении */
+}
+.PostCard__title,
+.PostCard__description {
+  font-size: 15px;
+  font-weight: 600;
+  color: grey;
+  margin-bottom: 10px;
+  
+}
+.PostCard__image {
+  padding: 10px 0px;
+}
+.PostCard__image img {
+  width: 100%;
+  object-fit: cover;
+  max-height: 170px;
+}

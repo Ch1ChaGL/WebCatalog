@@ -1,14 +1,18 @@
-import { PostService } from '@/services/post/post.service';
+import PostCard from '@/components/ui/PostCard/PostCard';
 import { IPost } from '@/types/post.interface';
-import { GetServerSideProps, NextPage } from 'next';
 import { FC } from 'react';
+import styles from './HomePage.module.css';
 
 const HomePage: FC<IHomePageData> = ({ posts }) => {
   return (
     <>
-      {posts.map(post => (
-        <div>{post.postName} {post.description}</div>
-      ))}
+      <div>
+        <div className={styles.posts}>
+          {posts.map(post => (
+            <PostCard {...post} key={post.postId} />
+          ))}
+        </div>
+      </div>
     </>
   );
 };

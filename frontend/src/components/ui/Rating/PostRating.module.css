@@ -1,0 +1,33 @@
+.rating-box {
+  border-radius: 20px;
+  max-width: 60px;
+  text-align: center;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+}
+.rating__star {
+  margin-right: 10px;
+  text-align: center;
+}
+.rating__star img {
+  width: 100%;
+  height: 15px;
+  transform: translateY(1px);
+}
+.rating {
+  font-size: 15px;
+  margin-right: 5px;
+}
+
+.greenRating {
+  background-color: var(--good-rating);
+}
+.yellowRating {
+  background-color: var(--average-rating);
+}
+.redRating {
+  background-color: var(--poor-rating);
+}

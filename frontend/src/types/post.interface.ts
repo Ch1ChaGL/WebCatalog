@@ -19,3 +19,4 @@ export interface IPostImage {
   filePath: string;
   order: number;
 }
+
