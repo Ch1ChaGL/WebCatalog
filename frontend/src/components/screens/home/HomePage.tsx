@@ -1,14 +1,20 @@
+'use client';
 import PostCard from '@/components/ui/PostCard/PostCard';
 import { IPost } from '@/types/post.interface';
 import { FC } from 'react';
 import styles from './HomePage.module.css';
+import { usePosts } from '@/hooks/post/usePosts';
+import Loader from '@/components/ui/Loader/Loader';
 
-const HomePage: FC<IHomePageData> = ({ posts }) => {
+const HomePage: FC = () => {
+  const posts = usePosts();
+  if (posts.isFetching) return <Loader />;
+  if (posts.isError) return <div>Произошла ошибка</div>;
   return (
     <>
       <div>
         <div className={styles.posts}>
-          {posts.map(post => (
+          {posts.data.map(post => (
             <PostCard {...post} key={post.postId} />
           ))}
         </div>

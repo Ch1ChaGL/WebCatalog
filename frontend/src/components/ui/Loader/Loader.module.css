@@ -1,0 +1,28 @@
+@keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Выберите значение, которое гарантирует, что оверлей будет поверх всех окон */
+  }
+  
+  .loader {
+    border: 8px solid var(--primary-pink);
+    border-top: 8px solid var(--secondary-pink);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
