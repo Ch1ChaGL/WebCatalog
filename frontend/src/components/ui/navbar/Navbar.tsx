@@ -12,7 +12,7 @@ const Navbar = () => {
       </div>
       <div className={styles.buttons}>
         {/* Кнопки справа */}
-        <Button src='/icon/catalogIcon.svg' href={'/login'}>
+        <Button src='/icon/catalogIcon.svg' href={'/'}>
           Каталог
         </Button>
         <Button src='/icon/faworites.png' href={'/'}>

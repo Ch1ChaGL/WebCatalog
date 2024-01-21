@@ -31,13 +31,19 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
 
   return (
     <>
-      <Slider {...sliderSettings} className={styles.slider}>
-        {postImages.map(image => (
-          <div className={styles.slider__item} key={image.postImageId}>
-            <img src={usePostImage(image.filePath)}/>
-          </div>
-        ))}
-      </Slider>
+      {postImages.length !== 0 ? (
+        <Slider {...sliderSettings} className={styles.slider}>
+          {postImages.map(image => (
+            <div className={styles.slider__item} key={image.postImageId}>
+              <img src={usePostImage(image.filePath)} />
+            </div>
+          ))}
+        </Slider>
+      ) : (
+        <div className={styles.noImageContainer}>
+          <img src='/icon/no-image.png' />
+        </div>
+      )}
       <div className={styles.PostPage__header}>
         <div className={styles.header__leftColumn}></div>
 
