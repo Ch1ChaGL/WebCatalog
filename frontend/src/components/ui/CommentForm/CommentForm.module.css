@@ -1,0 +1,40 @@
+.addCommentsBlock {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .commentInput {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid var(--light-pink);
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  .commentInput:focus {
+    border-color: var(--primary-pink);
+  }
+  
+  .commentButton {
+    position: relative;
+    background-color: var(--primary-pink);
+    color: var(--white);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+
+  .commentButton:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

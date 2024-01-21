@@ -3,4 +3,6 @@ export interface IComment {
   userId: number;
   postId: number;
   commentText: string;
+  created_at: string;
+  User: { nickname: string };
 }

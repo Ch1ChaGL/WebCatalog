@@ -12,7 +12,7 @@ const CategoryList: FC<Pick<IPost, 'categories'>> = ({
 }) => {
   const sliderSettings = {
     infinite: true,
-    slidesToShow: categories.length >= 3 ? 3 : categories.length, // Отобразить максимум 3 категории, если есть столько
+    slidesToShow: categories.length >= 2 ? 2 : categories.length, // Отобразить максимум 3 категории, если есть столько
     slidesToScroll: 1,
     swipeToSlide: true,
     arrows: false,

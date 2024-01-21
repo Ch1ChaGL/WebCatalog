@@ -4,6 +4,10 @@ import { CommentDto } from './dto/comment.addComment.dto';
 import { PostService } from 'src/post/post.service';
 import { Comment } from '@prisma/client';
 
+export interface CommentData extends Comment {
+  User: { nickname: string };
+}
+
 @Injectable()
 export class CommentService {
   constructor(
@@ -22,11 +26,16 @@ export class CommentService {
     });
   }
 
-  async getComments(postId: number): Promise<Comment[]> {
+  async getComments(postId: number): Promise<CommentData[]> {
     await this.postService.getPostById(postId);
     return await this.prisma.comment.findMany({
       where: {
         postId: postId,
+      },
+      include: {
+        User: {
+          select: { nickname: true },
+        },
       },
     });
   }

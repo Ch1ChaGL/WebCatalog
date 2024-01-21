@@ -16,7 +16,7 @@ const PostRating: FC<IRatingProps> = ({ rating }) => {
   return (
     <div className={`${styles['rating-box']} ${getRatingColorClass(rating)}`}>
       <div className={styles.rating__star}>
-        <img src='./icon/star.svg' />
+        <img src='/icon/star.svg' />
       </div>
       <div className={styles.rating}>{rating.toFixed(1)}</div>
     </div>

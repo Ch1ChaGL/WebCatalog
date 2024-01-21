@@ -20,8 +20,8 @@
 
 .slider__item img {
   width: 100%;
-  object-fit: cover;
-  max-height: 800px;
+  object-fit: scale-down;
+  max-height: 600px;
 }
 
 .header__rightColumn {
@@ -36,12 +36,45 @@
 }
 
 .header__description {
+  margin-top: 10px;
   font-size: 16px;
+  text-align: justify;
   line-height: 1.5;
   color: #555; /* Цвет текста - замените на свой */
 }
 
-.noImageContainer{
+.noImageContainer {
   display: flex;
   justify-content: center;
+}
+
+.link {
+  margin-top: 10px;
+}
+.link__title {
+  font-size: 25px;
+}
+
+.createrBlock {
+  padding: 20px;
+  margin-top: 10px;
+  background-color: #f0f0f0;
+}
+
+.createrBlock__title {
+  font-weight: 600;
+}
+
+.createrBlock__categoriesTitle {
+  margin: 10px 0px;
+}
+.nickname {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.commentsBlock {
+  margin-top: 10px;
+  background-color: #f0f0f0;
+  padding: 20px;
 }
