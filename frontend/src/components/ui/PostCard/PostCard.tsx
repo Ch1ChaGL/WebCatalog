@@ -1,22 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './PostCard.module.css';
 import PostRating from '../Rating/PostRating';
-import { IPostImage } from '@/types/post.interface';
+import { IPost, IPostImage } from '@/types/post.interface';
 import { usePostCardImagePath } from './usePostCardImagePath';
 import { upperFirstLetter } from '@/utils/upperFirstLetter';
 import { hideLongText } from '@/utils/hideLongText';
+import CategoryList from '../CategoryList/CategoryList';
+import { useRouter } from 'next/navigation';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-interface IPostCardData {
-  postId: number;
-  postName: string;
-  description: string;
-  postImage: IPostImage[];
-  categoryIds: number[];
-  rating: number;
-}
+const openPostPage = (postId: number, router: AppRouterInstance) => {
+  router.push(`/post/${postId}`);
+};
 
-const PostCard: React.FC<IPostCardData> = props => {
+const PostCard: React.FC<IPost> = props => {
   const imagePath = usePostCardImagePath(props.postImage);
+  const router = useRouter();
   return (
     <div className={styles.PostCard}>
       <div className={styles.PostCard__title}>
@@ -26,9 +25,17 @@ const PostCard: React.FC<IPostCardData> = props => {
       <div className={styles.PostCard__image}>
         <img src={imagePath} />
       </div>
-      <div className={styles.PostCard__categorys}>категории</div>
+      <div className={styles.PostCard__categorys}>
+        <CategoryList categories={props.categories} />
+      </div>
       <div className={styles.PostCard__description}>
         {hideLongText(upperFirstLetter(props.description), 50)}
+      </div>
+      <div
+        className={styles.button}
+        onClick={() => openPostPage(props.postId, router)}
+      >
+        Подробнее...
       </div>
     </div>
   );

@@ -1,6 +1,10 @@
 'use client';
 import './globals.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  keepPreviousData,
+} from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
 import HeaderComponent from '@/components/ui/Header/Header.component';
@@ -15,6 +19,7 @@ const quertClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: true,
+      placeholderData: keepPreviousData,
     },
   },
 });

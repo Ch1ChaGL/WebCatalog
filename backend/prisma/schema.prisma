@@ -102,12 +102,13 @@ model PostImage {
 }
 
 model Comment {
-  commentId   Int    @id @default(autoincrement()) @map("comment_id")
-  userId      Int    @map("user_id")
-  postId      Int    @map("post_id")
-  commentText String @map("comment_text")
-  User        User   @relation(fields: [userId], references: [userId])
-  Post        Post   @relation(fields: [postId], references: [postId])
+  commentId   Int      @id @default(autoincrement()) @map("comment_id")
+  userId      Int      @map("user_id")
+  postId      Int      @map("post_id")
+  created_at  DateTime
+  commentText String   @map("comment_text")
+  User        User     @relation(fields: [userId], references: [userId])
+  Post        Post     @relation(fields: [postId], references: [postId])
 }
 
 model Rating {

@@ -5,6 +5,7 @@ import { FC } from 'react';
 import styles from './HomePage.module.css';
 import { usePosts } from '@/hooks/post/usePosts';
 import Loader from '@/components/ui/Loader/Loader';
+import { useAuth } from '@/hooks/useAuth';
 
 const HomePage: FC = () => {
   const posts = usePosts();

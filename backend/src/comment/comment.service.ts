@@ -17,6 +17,7 @@ export class CommentService {
     return await this.prisma.comment.create({
       data: {
         ...dto,
+        created_at: new Date(Date.now()),
       },
     });
   }

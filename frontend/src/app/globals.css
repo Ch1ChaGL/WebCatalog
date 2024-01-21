@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
-
 :root {
   --background-color: #f8f9fa;
   --white: #fff;
@@ -35,4 +34,7 @@ html {
 .main {
   flex: 1 1 auto;
   margin-top: 10px;
+}
+
+a:active {
 }

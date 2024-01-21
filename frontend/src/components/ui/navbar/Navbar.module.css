@@ -19,3 +19,6 @@
   justify-content: flex-end;
   gap: 20px; /* Промежуток между кнопками */
 }
+.link {
+  text-decoration: none;
+}

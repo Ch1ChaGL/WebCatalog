@@ -1,4 +1,6 @@
 .PostCard {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #bbb;
   border-radius: 12px;
   padding: 20px 10px;
@@ -18,7 +20,11 @@
   font-weight: 600;
   color: grey;
   margin-bottom: 10px;
-  
+  text-align: justify;
+}
+
+.PostCard__description {
+  flex: 1 1 auto;
 }
 .PostCard__image {
   padding: 10px 0px;
@@ -27,4 +33,29 @@
   width: 100%;
   object-fit: cover;
   max-height: 170px;
+}
+
+.button {
+  align-self: flex-start;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--primary-pink);
+  background: linear-gradient(
+    to right,
+    var(--primary-pink) 50%,
+    var(--light-pink) 50%
+  );
+  background-size: 200% 100%;
+  transition: all 0.4s ease-in;
+}
+
+.button:hover {
+  background-position: -100% 0;
+  color: var(--primary-pink);
+  border: 2px solid black;
 }

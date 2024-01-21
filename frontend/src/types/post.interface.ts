@@ -8,7 +8,7 @@ export interface IPost {
   description: string;
   link: string;
   postImage: IPostImage[];
-  categoryIds: number[];
+  categories: { categoryId: number; categoryName: string }[];
   user: IUser;
   rating: number;
 }
@@ -19,4 +19,3 @@ export interface IPostImage {
   filePath: string;
   order: number;
 }
-

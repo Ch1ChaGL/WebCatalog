@@ -1,0 +1,42 @@
+/* Ваши глобальные стили или reset-стили */
+.slider{
+    max-width: fit-content;
+}
+.PostPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0; /* Цвет фона - замените на свой */
+}
+
+.header__leftColumn {
+  flex: 1;
+}
+
+.slider__item {
+  width: 100%; /* Ширина слайда */
+  overflow: hidden;
+}
+
+.slider__item img {
+  width: 100%; /* Чтобы изображение занимало 100% ширины слайда */
+  height: auto; /* Автоматическая высота для сохранения пропорций */
+}
+
+.header__rightColumn {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.header__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.header__description {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #555; /* Цвет текста - замените на свой */
+}

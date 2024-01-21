@@ -64,8 +64,9 @@ export class PostController {
     @UploadedFiles() images,
   ) {
     dto.categoryIds = JSON.parse(
-      dto.categoryIds ? dto.categoryIds.toString() : null,
+      dto.categoryIds ? JSON.stringify(dto.categoryIds) : null,
     );
+
     return await this.postService.updatePost(+postId, dto, images);
   }
 

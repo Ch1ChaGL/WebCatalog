@@ -16,7 +16,10 @@ export class CreatedPost {
   banReason?: string;
   description: string;
   link: string;
-  categoryIds: number[];
+  categories?: {
+    categoryId: number;
+    categoryName: string;
+  }[];
   user: UserWithoutPassword;
   rating: number;
 }

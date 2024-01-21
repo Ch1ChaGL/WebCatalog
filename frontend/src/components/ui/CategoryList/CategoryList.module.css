@@ -1,0 +1,13 @@
+.categoryList {
+  max-height: 30px; /* Ширина всего слайдера */
+}
+
+.categoryList {
+  overflow-y: hidden;
+  max-height: 100%;
+  width: 100%;
+}
+
+.row {
+  
+}

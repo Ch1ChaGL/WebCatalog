@@ -114,6 +114,11 @@ export class PostService {
           categoryPost: {
             select: {
               categoryId: true,
+              Category: {
+                select: {
+                  categoryName: true,
+                },
+              },
             },
           },
           postImage: true,
@@ -130,11 +135,19 @@ export class PostService {
 
           const user = await this.userService.getUserById(userPost.userId);
 
+          let categories = post.categoryPost.map(category => ({
+            categoryId: category.categoryId,
+            categoryName: category.Category.categoryName,
+          }));
+
+          categories = categories.sort((a, b) => a.categoryId - b.categoryId);
+          const rating = await this.ratingService.getRate(post.postId);
+
           return {
             ...rest,
-            categoryIds: post.categoryPost.map(category => category.categoryId),
-            user: user,
-            rating: await this.ratingService.getRate(post.postId),
+            categories,
+            user,
+            rating,
           };
         }),
       );
