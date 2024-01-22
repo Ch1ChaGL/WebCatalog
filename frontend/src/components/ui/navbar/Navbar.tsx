@@ -18,7 +18,7 @@ const Navbar = () => {
         <Button src='/icon/faworites.png' href={'/'}>
           Избранное
         </Button>
-        <Button src='/icon/login.png' href={'/'}>
+        <Button src='/icon/login.png' href={'/login'}>
           Вход
         </Button>
         {/* Можно добавить больше кнопок */}

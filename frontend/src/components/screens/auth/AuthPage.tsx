@@ -6,7 +6,7 @@ import { ILoginData, IRegisterData } from '@/store/user/user.interface';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-function Auth() {
+function AuthPage() {
   const { isLoading } = useAuth();
 
   const { login, register } = useActions();
@@ -41,4 +41,4 @@ function Auth() {
   );
 }
 
-export default Auth;
+export default AuthPage;

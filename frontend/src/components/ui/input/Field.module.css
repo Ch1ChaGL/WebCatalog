@@ -1,0 +1,26 @@
+.label {
+  display: block;
+}
+.title {
+  margin-bottom: 5px;
+}
+.input__container {
+  margin-bottom: 20px;
+}
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid var(--light-pink);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  border-color: var(--primary-pink);
+}
+
+.error{
+    color: #e96c6c;
+}

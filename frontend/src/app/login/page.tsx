@@ -1,4 +1,5 @@
-import Auth from '@/components/screens/auth/Auth';
+import Auth from '@/components/screens/auth/AuthPage';
+import { LoginForm } from '@/components/screens/auth/Login/Login';
 import { Metadata } from 'next';
 
 export const methadata: Metadata = {
@@ -6,10 +7,9 @@ export const methadata: Metadata = {
 };
 
 const LoginPage = () => {
-
   return (
     <div>
-      <Auth />
+      <LoginForm />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import Auth from '@/components/screens/auth/Auth';
+import Auth from '@/components/screens/auth/AuthPage';
 import { Metadata } from 'next';
 
 export const methadata: Metadata = {

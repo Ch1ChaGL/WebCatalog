@@ -32,8 +32,8 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <HeaderComponent />
         <div className='wrapper'>
+        <HeaderComponent />
           <div className='main'>
             <div className='container'>
               <QueryClientProvider client={quertClient}>
@@ -41,8 +41,8 @@ export default function RootLayout({
               </QueryClientProvider>
             </div>
           </div>
-        </div>
         <FooterComponent />
+        </div>
       </body>
     </html>
   );

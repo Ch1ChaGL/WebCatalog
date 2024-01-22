@@ -5,11 +5,16 @@ import { FC } from 'react';
 import styles from './HomePage.module.css';
 import { usePosts } from '@/hooks/post/usePosts';
 import Loader from '@/components/ui/Loader/Loader';
+import { useAuth } from '@/hooks/useAuth';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 
 const HomePage: FC = () => {
+  const data = useTypedSelector(state => state.user);
   const posts = usePosts();
   if (posts.isFetching) return <Loader />;
   if (posts.isError) return <div>Произошла ошибка</div>;
+
+  console.log(data.user);
   return (
     <>
       <div>
