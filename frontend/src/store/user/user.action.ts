@@ -4,6 +4,7 @@ import { IAuthResponse, ILoginData, IRegisterData } from './user.interface';
 import { AuthService } from '@/services/auth/auth.service';
 import { AuthEndPoint } from '@/services/auth/auth.config';
 import { errorCatch } from '@/app/api/api.helper';
+import { redirect } from 'next/navigation';
 
 export const register = createAsyncThunk<IAuthResponse, IRegisterData>(
   'auth/registration',
@@ -31,6 +32,8 @@ export const login = createAsyncThunk<IAuthResponse, ILoginData>(
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   removeFromStorage();
+  console.log('logout');
+  redirect('/');
 });
 
 export const checkAuth = createAsyncThunk<IAuthResponse>(

@@ -1,3 +1,4 @@
+'use client';
 import withAuth from '@/wrapp';
 import React from 'react';
 

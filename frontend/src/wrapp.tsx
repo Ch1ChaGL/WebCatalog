@@ -10,12 +10,10 @@ const withAuth = (WrappedComponent, allowedRoles = []) => {
     const router = useRouter();
     const { user } = useTypedSelector(state => state.user);
 
-    console.log(user);
-
     // Если пользователь не аутентифицирован, перенаправьте на страницу входа
     if (!user) {
+      router.replace('/login');
       redirect('/login'); // или редирект на страницу входа
-      // return null;
     }
 
     // Если пользователь не имеет правильной роли, не рендерить обернутый компонент

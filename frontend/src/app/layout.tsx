@@ -33,15 +33,17 @@ export default function RootLayout({
     <html lang='en'>
       <body>
         <div className='wrapper'>
-        <HeaderComponent />
-          <div className='main'>
-            <div className='container'>
-              <QueryClientProvider client={quertClient}>
-                <Provider store={store}>{children}</Provider>
-              </QueryClientProvider>
+          <Provider store={store}>
+            <HeaderComponent />
+            <div className='main'>
+              <div className='container'>
+                <QueryClientProvider client={quertClient}>
+                  {children}
+                </QueryClientProvider>
+              </div>
             </div>
-          </div>
-        <FooterComponent />
+            <FooterComponent />
+          </Provider>
         </div>
       </body>
     </html>

@@ -5,9 +5,12 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { ILoginData } from '@/store/user/user.interface';
 import { useActions } from '@/hooks/useActions';
 import { validateEmail } from '../email-validate';
+import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
   const { login } = useActions();
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -20,6 +23,7 @@ export const LoginForm = () => {
   const onSubmit: SubmitHandler<ILoginData> = data => {
     login(data);
     reset();
+    router.replace('/');
   };
 
   return (
