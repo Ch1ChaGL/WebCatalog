@@ -4,9 +4,9 @@ import {
   Injectable,
   forwardRef,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
 import { RateDto } from './dto/rating.rate.dto';
 import { PostService } from 'src/post/post.service';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class RatingService {
