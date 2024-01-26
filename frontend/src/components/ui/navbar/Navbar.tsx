@@ -8,9 +8,9 @@ import { redirect, useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const { user } = useTypedSelector(state => state.user);
-
+  console.log(user);
   const router = useRouter();
-  const { logout } = useActions();
+  const { logout, checkAuth } = useActions();
 
   return (
     <div className={`${styles.navbar}`}>
@@ -32,7 +32,13 @@ const Navbar = () => {
             Вход
           </Button>
         ) : (
-          <Button src='/icon/выход.svg' click={() => logout()}>
+          <Button
+            src='/icon/выход.svg'
+            click={() => {
+              logout();
+              location.reload();
+            }}
+          >
             Выход
           </Button>
         )}

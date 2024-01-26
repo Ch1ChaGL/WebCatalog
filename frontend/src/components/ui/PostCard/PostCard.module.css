@@ -1,17 +1,17 @@
 .PostCard {
   display: flex;
   flex-direction: column;
-  border: 1px solid #bbb;
+  /* border: 1px solid #bbb; */
   border-radius: 12px;
   padding: 20px 10px;
   font-family: 'Barlow', sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 .PostCard:hover {
   background-color: #f0f0f0; /* Изменение цвета фона при наведении */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Небольшая тень при наведении */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Небольшая тень при наведении */
   transform: scale(1.05); /* Увеличение размера при наведении */
 }
 .PostCard__title,
@@ -38,7 +38,7 @@
 .button {
   align-self: flex-start;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: bold;
   color: white;

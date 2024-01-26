@@ -82,16 +82,34 @@ export class AuthService {
   }
 
   async refreshToken(dto: RefreshTokenDto) {
-    const result = await this.jwtService.verifyAsync(dto.token);
-    if (!result) throw new UnauthorizedException('Вход заблокирован');
+    try {
+      // Verify the refresh token
+      const result = await this.jwtService.verifyAsync(dto.token);
 
-    const user = await this.userService.getUserById(result.userId);
+      // Check if verification failed
+      if (!result) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
 
-    const token = await this.generateToken(user);
+      // Fetch user details based on the userId from the verified token
+      const user = await this.userService.getUserById(result.userId);
 
-    return {
-      user: { ...user },
-      ...token,
-    };
+      // Check if the user exists
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      // Generate a new access token and refresh token
+      const tokens = await this.generateToken(user);
+
+      // Return the refreshed user and tokens
+      return {
+        user: { ...user }, // Assuming you want to include user details in the response
+        ...tokens,
+      };
+    } catch (error) {
+      // Handle any errors that occur during the refresh process
+      throw new UnauthorizedException('Failed to refresh token', error.message);
+    }
   }
 }

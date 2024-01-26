@@ -20,7 +20,7 @@ export const AuthService = {
     const response = await instance<IAuthResponse>(
       createRequestConfig(HttpMethods.GET, AuthEndPoint.Chek),
     );
-
+    console.log(response.data);
     if (response.data.accessToken) saveToStorage(response.data);
 
     return response;

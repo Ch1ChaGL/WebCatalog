@@ -1,8 +1,9 @@
 'use client';
 import React, { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 import styles from './Button.module.css';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useActions } from '@/hooks/useActions';
+import { useAuth } from '@/hooks/useAuth';
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   src: string;
@@ -18,7 +19,6 @@ const Button: React.FC<PropsWithChildren<IButton>> = ({
   ...rest
 }) => {
   const { push } = useRouter();
-  const { logout } = useActions();
   return (
     <div
       className={`${styles.button}`}
@@ -26,6 +26,7 @@ const Button: React.FC<PropsWithChildren<IButton>> = ({
         click
           ? () => {
               click();
+              redirect('/');
             }
           : () => push(href)
       }

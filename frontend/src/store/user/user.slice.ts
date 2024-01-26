@@ -6,6 +6,7 @@ import { getLocalStorage } from '@/utils/local-storage';
 export const initialState: IInitialState = {
   user: getLocalStorage('user'),
   isLoading: false,
+  error: null,
 };
 
 export const userSlice = createSlice({
@@ -38,6 +39,11 @@ export const userSlice = createSlice({
       })
       .addCase(checkAuth.fulfilled, (state, { payload }) => {
         state.user = payload.user;
+      })
+      .addCase(checkAuth.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.user = null;
+        state.error = payload.message; // Extracting and storing only the error message
       })
       .addCase(logout.fulfilled, state => {
         state.user = null;
