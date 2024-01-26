@@ -9,6 +9,7 @@ export interface IToken {
 export interface IInitialState {
   user: IUserState | null;
   isLoading: boolean;
+  error: string | null;
 }
 
 export interface ILoginData {
