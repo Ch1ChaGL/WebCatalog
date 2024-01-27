@@ -1,8 +1,10 @@
 import styles from './CommentForm.module.css';
 
-const CommentForm = () => {
+const CommentForm = ({ enabled }: { enabled: boolean }) => {
   return (
-    <div className={styles.addCommentsBlock}>
+    <div
+      className={`${styles.addCommentsBlock} ${enabled ? '' : styles.disabled}`}
+    >
       <textarea
         className={styles.commentInput}
         placeholder='Введите ваш комментарий...'

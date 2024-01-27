@@ -27,6 +27,9 @@ const Navbar = () => {
         <Button src='/icon/faworites.png' href={'/favorites'}>
           Избранное
         </Button>
+        <Button src='/icon/lk.png' href={'/profile'}>
+          Личный кабинет
+        </Button>
         {user == null ? (
           <Button src='/icon/login.png' href={'/login'}>
             Вход

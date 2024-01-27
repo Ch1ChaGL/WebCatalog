@@ -8,8 +8,6 @@ import { validateEmail } from '../email-validate';
 import { useRouter } from 'next/navigation';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { useState } from 'react';
-import Popup from '@/components/ui/popup/Popup';
-import { Alert, AlertTitle } from '@mui/material';
 import CustomAlert from '@/components/ui/customAlert/CustomAlert';
 
 export const LoginForm = () => {

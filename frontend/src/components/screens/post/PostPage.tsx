@@ -11,6 +11,7 @@ import PostRating from '@/components/ui/Rating/PostRating';
 import { useComments } from '@/hooks/post/useComments';
 import { useMoscowDate } from '@/hooks/useMoscowDate';
 import CommentForm from '@/components/ui/CommentForm/CommentForm';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
 
 interface PostPageProps {
   postId: string;
@@ -19,6 +20,8 @@ interface PostPageProps {
 const PostPage: FC<PostPageProps> = ({ postId }) => {
   const { data, isFetching, isError, isSuccess } = usePost(postId);
   const { commentsData, isCommentsFetching } = useComments(postId);
+  const user = useTypedSelector(state => state.user);
+  
   if (isFetching) return <Loader />;
   if (isError) return <div>Произошла ошибка</div>;
 
@@ -103,7 +106,7 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
           </div>
         )}
 
-        <CommentForm />
+        <CommentForm enabled={user.user !== null} />
       </div>
     </>
   );
