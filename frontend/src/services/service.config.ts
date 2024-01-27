@@ -6,6 +6,7 @@ import { CommentEndPoint } from './comment/comment.config';
 import { PostEndPoint } from './post/post.config';
 import { RatingEndPoint } from './rating/rating.config';
 import { UserEndPoint } from './user/user.config';
+import { FavoritesEndPoint } from './favorites/favorites.config';
 
 export enum HttpMethods {
   GET = 'GET',
@@ -21,7 +22,8 @@ type typeEndPoint =
   | CommentEndPoint
   | PostEndPoint
   | RatingEndPoint
-  | UserEndPoint;
+  | UserEndPoint
+  | FavoritesEndPoint;
 
 export const createRequestConfig = (
   method: HttpMethods,

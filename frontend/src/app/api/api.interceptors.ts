@@ -7,7 +7,6 @@ export const instance = axios.create({
   baseURL: process.env.API_URL,
   headers: getContentType(),
 });
-
 instance.interceptors.request.use(config => {
   const accessToken = getAccessToken();
 

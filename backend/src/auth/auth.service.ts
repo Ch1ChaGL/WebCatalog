@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -64,7 +65,7 @@ export class AuthService {
     const user = await this.userService.getUserByIdWithPassword(exist.userId);
 
     const isValid = await verify(user.password, dto.password);
-    if (!isValid) throw new UnauthorizedException('Неправильный пароль');
+    if (!isValid) throw new ForbiddenException('Неправильный пароль');
 
     return await this.userService.getUserById(user.userId);
   }

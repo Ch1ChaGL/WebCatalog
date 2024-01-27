@@ -15,8 +15,8 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get(':id')
-  async getAllPost(@Param(':id') userId) {
-    return await this.favoritesService.getFavoritesPost(userId);
+  async getAllPost(@Param('id') userId: string) {
+    return await this.favoritesService.getFavoritesPost(Number(userId));
   }
 
   @HttpCode(200)

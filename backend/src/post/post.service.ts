@@ -81,30 +81,42 @@ export class PostService {
     if (!userPost)
       throw new BadRequestException('Поста с таким id не существует');
 
-    return await this.prisma.post
-      .findFirst({
-        where: {
-          postId: postId,
-        },
-        include: {
-          categoryPost: {
-            select: {
-              categoryId: true,
+    const post = await this.prisma.post.findFirst({
+      where: {
+        postId: postId,
+      },
+      include: {
+        categoryPost: {
+          select: {
+            categoryId: true,
+            Category: {
+              select: {
+                categoryName: true,
+              },
             },
           },
-          postImage: true,
         },
-      })
-      .then(async post => {
-        const { categoryPost, ...rest } = post;
+        postImage: true,
+      },
+    });
+    const { categoryPost, ...rest } = post;
 
-        return {
-          ...rest,
-          categoryIds: post.categoryPost.map(category => category.categoryId),
-          user: await this.userService.getUserById(userPost.userId),
-          rating: await this.ratingService.getRate(post.postId),
-        };
-      });
+    const user = await this.userService.getUserById(userPost.userId);
+
+    let categories = post.categoryPost.map(category => ({
+      categoryId: category.categoryId,
+      categoryName: category.Category.categoryName,
+    }));
+
+    categories = categories.sort((a, b) => a.categoryId - b.categoryId);
+    const rating = await this.ratingService.getRate(post.postId);
+
+    return {
+      ...rest,
+      categories,
+      user,
+      rating,
+    };
   }
 
   async getAllPost(): Promise<CreatedPost[] | null> {

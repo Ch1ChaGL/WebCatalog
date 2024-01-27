@@ -7,12 +7,20 @@ import { useActions } from '@/hooks/useActions';
 import { validateEmail } from '../email-validate';
 import { useRouter } from 'next/navigation';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
-import Loader from '@/components/ui/Loader/Loader';
+import { useState } from 'react';
+import Popup from '@/components/ui/popup/Popup';
+import { Alert, AlertTitle } from '@mui/material';
+import CustomAlert from '@/components/ui/customAlert/CustomAlert';
 
 export const LoginForm = () => {
   const { login, clearError } = useActions();
   const router = useRouter();
   const data = useTypedSelector(state => state.user);
+
+  const [errorPopup, setErrorPopup] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
 
   const {
     register,
@@ -28,12 +36,16 @@ export const LoginForm = () => {
     reset();
   };
 
-  if (data.isLoading) return <Loader />;
+  // if (data.isLoading) return <Loader />;
+  if (data.user) router.replace('/');
   if (data.error !== null) {
-    console.log(data.error);
+    setErrorPopup({ title: 'Произошла ошибка', message: data.error });
     clearError();
   }
-  if (data.user) router.replace('/');
+  const handlePopupClose = () => {
+    setErrorPopup(null);
+    // Assuming you have a clearError action in your useActions hook
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -48,7 +60,7 @@ export const LoginForm = () => {
                 required: 'Email обязательное поле',
                 pattern: {
                   value: validateEmail,
-                  message: 'Введите валидный пароль',
+                  message: 'Введите валидный email',
                 },
               })}
               error={errors.email?.message}
@@ -67,7 +79,7 @@ export const LoginForm = () => {
               error={errors.password?.message}
             />
             <div className={styles.goAnotherAuthPage}>
-              Еще нет аккаунта ? Пора{' '}
+              Еще нет аккаунта? Пора{' '}
               <span
                 className={styles.link}
                 onClick={() => router.push('/register')}
@@ -76,6 +88,16 @@ export const LoginForm = () => {
               </span>
             </div>
             <button className={styles.authButton}>Войти</button>
+
+            {errorPopup && (
+              <CustomAlert
+                type='error'
+                title='Ошибка'
+                description={errorPopup.message}
+                open={Boolean(errorPopup)}
+                onClose={handlePopupClose}
+              />
+            )}
           </form>
         </div>
       </div>

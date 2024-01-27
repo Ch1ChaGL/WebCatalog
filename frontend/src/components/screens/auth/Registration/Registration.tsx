@@ -5,10 +5,20 @@ import { IRegisterData } from '@/store/user/user.interface';
 import Field from '@/components/ui/input/Field';
 import { validateEmail } from '../email-validate';
 import { useRouter } from 'next/navigation';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { useState } from 'react';
+import CustomAlert from '@/components/ui/customAlert/CustomAlert';
 
 export const Registration = () => {
-  const { register } = useActions();
+  const { register, clearError } = useActions();
   const router = useRouter();
+
+  const data = useTypedSelector(state => state.user);
+
+  const [errorPopup, setErrorPopup] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
 
   const {
     register: UserRegister,
@@ -22,7 +32,16 @@ export const Registration = () => {
   const onSubmit: SubmitHandler<IRegisterData> = data => {
     register({ ...data, roles: ['user'] });
     reset();
-    router.replace('/');
+  };
+
+  if (data.user) router.replace('/');
+  if (data.error !== null) {
+    setErrorPopup({ title: 'Произошла ошибка', message: data.error });
+    clearError();
+  }
+  const handlePopupClose = () => {
+    setErrorPopup(null);
+    // Assuming you have a clearError action in your useActions hook
   };
 
   return (
@@ -78,6 +97,15 @@ export const Registration = () => {
               </span>
             </div>
             <button className={styles.authButton}>Зарегестрироваться</button>
+            {errorPopup && (
+              <CustomAlert
+                type='error'
+                title='Ошибка'
+                description={errorPopup.message}
+                open={Boolean(errorPopup)}
+                onClose={handlePopupClose}
+              />
+            )}
           </form>
         </div>
       </div>

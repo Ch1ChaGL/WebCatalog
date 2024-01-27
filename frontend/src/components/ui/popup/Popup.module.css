@@ -1,0 +1,60 @@
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup {
+  background: linear-gradient(135deg, #ff8c94, #ff625c);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 400px;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.popupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+}
+
+.closeButton:hover {
+  color: #eee;
+}
+
+.popupContent {
+  margin-top: 15px;
+  color: #fff;
+}
+
+.tooltip {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #ff625c;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+/* Add any additional styles as needed */
