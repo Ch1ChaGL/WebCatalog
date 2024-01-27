@@ -6,9 +6,10 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
-import { store } from '@/store';
+import { persistor, store } from '@/store';
 import HeaderComponent from '@/components/ui/Header/Header.component';
 import FooterComponent from '@/components/ui/Footer/Footer.component';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // export const metadata: Metadata = {
 //   title: 'Create Next App',
@@ -34,15 +35,17 @@ export default function RootLayout({
       <body>
         <div className='wrapper'>
           <Provider store={store}>
-            <HeaderComponent />
-            <div className='main'>
-              <div className='container'>
-                <QueryClientProvider client={quertClient}>
-                  {children}
-                </QueryClientProvider>
+            <PersistGate loading={null} persistor={persistor}>
+              <HeaderComponent />
+              <div className='main'>
+                <div className='container'>
+                  <QueryClientProvider client={quertClient}>
+                    {children}
+                  </QueryClientProvider>
+                </div>
               </div>
-            </div>
-            <FooterComponent />
+              <FooterComponent />
+            </PersistGate>
           </Provider>
         </div>
       </body>

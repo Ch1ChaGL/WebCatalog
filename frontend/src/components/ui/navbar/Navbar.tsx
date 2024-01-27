@@ -36,7 +36,6 @@ const Navbar = () => {
             src='/icon/выход.svg'
             click={() => {
               logout();
-              location.reload();
             }}
           >
             Выход

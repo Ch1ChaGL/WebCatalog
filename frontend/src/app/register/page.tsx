@@ -1,10 +1,7 @@
-import Auth from '@/components/screens/auth/AuthPage';
+'use client';
+import Registration from '@/components/screens/auth/Registration/Registration';
 import { Metadata } from 'next';
 
-export const methadata: Metadata = {
-  title: 'Register',
-};
-
 export default function RegisterPage() {
-  return <Auth type='register' />;
+  return <Registration />;
 }

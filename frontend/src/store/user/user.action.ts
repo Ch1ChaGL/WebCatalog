@@ -1,5 +1,5 @@
 import { removeFromStorage } from './../../services/auth/auth.helper';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { IAuthResponse, ILoginData, IRegisterData } from './user.interface';
 import { AuthService } from '@/services/auth/auth.service';
 import { AuthEndPoint } from '@/services/auth/auth.config';
@@ -18,6 +18,8 @@ export const register = createAsyncThunk<IAuthResponse, IRegisterData>(
   },
 );
 
+export const clearError = createAction('user/clearError');
+
 export const login = createAsyncThunk<IAuthResponse, ILoginData>(
   'auth/login',
   async (data, thunkAPI) => {
@@ -25,6 +27,7 @@ export const login = createAsyncThunk<IAuthResponse, ILoginData>(
       const response = await AuthService.main(AuthEndPoint.Login, data);
       return response;
     } catch (error) {
+      console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   },
@@ -32,8 +35,6 @@ export const login = createAsyncThunk<IAuthResponse, ILoginData>(
 
 export const logout = createAsyncThunk('auth/logout', async () => {
   removeFromStorage();
-  console.log('logout');
-  redirect('/');
 });
 
 export const checkAuth = createAsyncThunk<IAuthResponse>(

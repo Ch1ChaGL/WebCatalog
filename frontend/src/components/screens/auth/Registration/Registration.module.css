@@ -75,17 +75,16 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-.goAnotherAuthPage{
+.goAnotherAuthPage {
   margin: 0px 0px 10px 0px;
 }
-.link{
+.link {
   cursor: pointer;
   color: var(--primary-pink);
   opacity: 0.6;
   transition: all 0.3s ease;
 }
 
-.link:hover{
+.link:hover {
   opacity: 1;
 }

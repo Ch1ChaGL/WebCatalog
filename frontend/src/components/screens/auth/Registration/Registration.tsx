@@ -1,54 +1,56 @@
-'use client';
-import Field from '@/components/ui/input/Field';
-import styles from './Login.module.css';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { ILoginData } from '@/store/user/user.interface';
 import { useActions } from '@/hooks/useActions';
+import styles from './Registration.module.css';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { IRegisterData } from '@/store/user/user.interface';
+import Field from '@/components/ui/input/Field';
 import { validateEmail } from '../email-validate';
 import { useRouter } from 'next/navigation';
-import { useTypedSelector } from '@/hooks/useTypedSelector';
-import Loader from '@/components/ui/Loader/Loader';
 
-export const LoginForm = () => {
-  const { login, clearError } = useActions();
+export const Registration = () => {
+  const { register } = useActions();
   const router = useRouter();
-  const data = useTypedSelector(state => state.user);
 
   const {
-    register,
+    register: UserRegister,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ILoginData>({
+  } = useForm<IRegisterData>({
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<ILoginData> = data => {
-    login(data);
+  const onSubmit: SubmitHandler<IRegisterData> = data => {
+    register({ ...data, roles: ['user'] });
     reset();
+    router.replace('/');
   };
-
-  if (data.isLoading) return <Loader />;
-  if (data.error !== null) {
-    console.log(data.error);
-    clearError();
-  }
-  if (data.user) router.replace('/');
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.authForm__container}>
         <div className={styles.authForm}>
-          <h2>Login</h2>
+          <h2>Registration</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <Field
+              text={'Nickname'}
+              placeholder='Введите nickname'
+              {...UserRegister('nickname', {
+                required: 'nickname обязательное поле',
+                minLength: {
+                  value: 5,
+                  message: 'nickname должен содержать минимум 5 символов',
+                },
+              })}
+              error={errors.nickname?.message}
+            />
             <Field
               text={'Email'}
               placeholder='Введите почту'
-              {...register('email', {
+              {...UserRegister('email', {
                 required: 'Email обязательное поле',
                 pattern: {
                   value: validateEmail,
-                  message: 'Введите валидный пароль',
+                  message: 'Введите валидный email',
                 },
               })}
               error={errors.email?.message}
@@ -56,7 +58,7 @@ export const LoginForm = () => {
             <Field
               text={'Пароль'}
               placeholder='Введите пароль'
-              {...register('password', {
+              {...UserRegister('password', {
                 required: 'Пароль обязательное поле',
                 minLength: {
                   value: 5,
@@ -67,15 +69,15 @@ export const LoginForm = () => {
               error={errors.password?.message}
             />
             <div className={styles.goAnotherAuthPage}>
-              Еще нет аккаунта ? Пора{' '}
+              Уже есть аккаунт? Пора{' '}
               <span
                 className={styles.link}
-                onClick={() => router.push('/register')}
+                onClick={() => router.push('/login')}
               >
-                зарегестрировать
+                войти
               </span>
             </div>
-            <button className={styles.authButton}>Войти</button>
+            <button className={styles.authButton}>Зарегестрироваться</button>
           </form>
         </div>
       </div>
@@ -83,4 +85,4 @@ export const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Registration;

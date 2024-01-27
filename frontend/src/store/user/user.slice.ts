@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { AsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IInitialState } from './user.interface';
 import { checkAuth, login, logout, register } from './user.action';
 import { getLocalStorage } from '@/utils/local-storage';
@@ -6,13 +6,17 @@ import { getLocalStorage } from '@/utils/local-storage';
 export const initialState: IInitialState = {
   user: getLocalStorage('user'),
   isLoading: false,
-  error: null,
+  error: '',
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: state => {
+      state.error = null;
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(register.pending, state => {
@@ -22,9 +26,10 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.user = payload.user;
       })
-      .addCase(register.rejected, state => {
+      .addCase(register.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.user = null;
+        state.error = payload.response.data.message;
       })
       .addCase(login.pending, state => {
         state.isLoading = true;
@@ -33,9 +38,10 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.user = payload.user;
       })
-      .addCase(login.rejected, state => {
+      .addCase(login.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.user = null;
+        state.error = payload.response.data.message;
       })
       .addCase(checkAuth.fulfilled, (state, { payload }) => {
         state.user = payload.user;
@@ -43,9 +49,9 @@ export const userSlice = createSlice({
       .addCase(checkAuth.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.user = null;
-        state.error = payload.message; // Extracting and storing only the error message
+        state.error = payload.response.data.message; // Extracting and storing only the error message
       })
-      .addCase(logout.fulfilled, state => {
+      .addCase(logout.pending, state => {
         state.user = null;
       });
   },
