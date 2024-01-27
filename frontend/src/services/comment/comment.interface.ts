@@ -1,3 +1,5 @@
-import { IComment } from '@/types/comment.interface';
-
-export interface ICommentCreateRequest extends Omit<IComment, 'commentId'> {}
+export interface ICommentCreateRequest {
+  userId: number | string | undefined;
+  postId: number | string | undefined;
+  commentText: string;
+}

@@ -11,16 +11,16 @@ import {
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.addComment.dto';
 import { Auth } from 'src/decorators/auth.decorators';
+import { Comment } from '@prisma/client';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @UsePipes(new ValidationPipe())
-  @Auth()
   @HttpCode(200)
   @Post('add')
-  async addComment(@Body() comment: CommentDto) {
+  async addComment(@Body() comment: Comment) {
     return this.commentService.addComment(comment);
   }
 

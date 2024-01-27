@@ -15,12 +15,12 @@ export class CommentService {
     private postService: PostService,
   ) {}
 
-  async addComment(dto: CommentDto): Promise<Comment> {
-    await this.postService.getPostById(dto.postId);
-
+  async addComment(dto: Comment): Promise<Comment> {
     return await this.prisma.comment.create({
       data: {
-        ...dto,
+        commentText: dto.commentText,
+        postId: Number(dto.postId),
+        userId: dto.userId,
         created_at: new Date(Date.now()),
       },
     });

@@ -21,7 +21,7 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
   const { data, isFetching, isError, isSuccess } = usePost(postId);
   const { commentsData, isCommentsFetching } = useComments(postId);
   const user = useTypedSelector(state => state.user);
-  
+
   if (isFetching) return <Loader />;
   if (isError) return <div>Произошла ошибка</div>;
 
@@ -106,7 +106,7 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
           </div>
         )}
 
-        <CommentForm enabled={user.user !== null} />
+        <CommentForm enabled={user.user !== null} postId={postId} />
       </div>
     </>
   );
