@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const usePost = (postId: string) => {
   const { data, isError, isSuccess, isFetching } = useQuery({
-    queryKey: ['get post'],
+    queryKey: [`get post ${postId}`],
     initialData: {} as IPost,
     queryFn: () => PostService.getPost(postId),
   });

@@ -1,4 +1,4 @@
-export class TogleFavoritesPost {
+export class FavoritesPost {
   userId: number;
   postId: number;
 }

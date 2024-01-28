@@ -37,4 +37,32 @@ export const FavoritesService = {
 
     return response.data;
   },
+
+  async isFavorites(data: {
+    userId: number;
+    postId: number;
+  }): Promise<boolean> {
+    const response = await instance<boolean>(
+      createRequestConfig(
+        HttpMethods.POST,
+        FavoritesEndPoint.IS_FAVORITES,
+        data,
+      ),
+    );
+
+    return response.data;
+  },
+
+  async ToggleFavorites(data: {
+    userId: number;
+    postId: number;
+  }): Promise<void> {
+    const response = await instance<void>(
+      createRequestConfig(
+        HttpMethods.POST,
+        FavoritesEndPoint.TOGGLE_FAVORITES,
+        data,
+      ),
+    );
+  },
 };

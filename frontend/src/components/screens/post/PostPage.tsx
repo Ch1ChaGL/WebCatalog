@@ -12,6 +12,13 @@ import { useComments } from '@/hooks/post/useComments';
 import { useMoscowDate } from '@/hooks/useMoscowDate';
 import CommentForm from '@/components/ui/CommentForm/CommentForm';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
+import {
+  useFavorites,
+  useIsFavorites,
+  useToggleFavorites,
+} from '@/hooks/favorites/useFavorites';
+import { Rating } from 'react-simple-star-rating';
+import { useRating } from '@/hooks/rating/useRating';
 
 interface PostPageProps {
   postId: string;
@@ -20,9 +27,21 @@ interface PostPageProps {
 const PostPage: FC<PostPageProps> = ({ postId }) => {
   const { data, isFetching, isError, isSuccess } = usePost(postId);
   const { commentsData, isCommentsFetching } = useComments(postId);
-  const user = useTypedSelector(state => state.user);
+  const rating = useRating(+postId);
 
-  if (isFetching) return <Loader />;
+  const user = useTypedSelector(state => state.user);
+  const { data: isFavorites, isFetching: isFavoritesFetching } = useIsFavorites(
+    {
+      postId: +postId,
+      userId: user.user?.userId as number,
+    },
+  );
+  const toggleFavorites = useToggleFavorites({
+    postId: +postId,
+    userId: user.user?.userId as number,
+  });
+
+  if (isFetching || isFavoritesFetching) return <Loader />;
   if (isError) return <div>Произошла ошибка</div>;
 
   const postImages = data.postImage.sort((a, b) => a.order - b.order);
@@ -34,6 +53,19 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
     swipeToSlide: true,
     arrows: true,
     focusOnSelect: true,
+  };
+
+  const favoritesClick = () => {
+    if (!user.user) return;
+    toggleFavorites.mutate({
+      postId: +postId,
+      userId: user.user.userId as number,
+    });
+  };
+
+  const rate = (rate: number) => {
+    if (!user.user) return;
+    rating.mutate({ rate: rate, userId: user.user.userId as number });
   };
 
   return (
@@ -53,8 +85,28 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
       )}
       <div className={styles.PostPage__header}>
         <div className={styles.header__rigthColumn}>
-          <div className={styles.header__title}>{data.postName}</div>
-          <PostRating rating={data.rating} />
+          <div className={styles.header}>
+            <div className={styles.header__title}>{data.postName}</div>
+            <div
+              className={
+                user.user ? styles.favorites : styles.favorites_disabled
+              }
+              onClick={() => favoritesClick()}
+            >
+              {isFavorites && user.user ? (
+                <img src='/icon/favorites-black.svg' />
+              ) : (
+                <img src='/icon/favorites-white.svg' />
+              )}
+            </div>
+          </div>
+          <PostRating rating={data.rating}/>
+          <Rating
+            initialValue={data.rating}
+            allowFraction={true}
+            onClick={rate}
+            className={user.user ? '' : styles.star_disabled}
+          />
           <div className={styles.header__description}>{data.description}</div>
           <div className={styles.link}>
             <a className={styles.link__title} href={data.link}>
@@ -86,26 +138,32 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
       </div>
 
       <div className={styles.commentsBlock}>
-        <div className={styles.createrBlock__title}>Комментарии:</div>
         {isCommentsFetching ? (
           <Loader />
         ) : (
           <div>
             {commentsData.length !== 0 ? (
               commentsData.map(comment => (
-                <p>
-                  <span className={styles.nickname}>
-                    {comment.User.nickname}
-                  </span>
-                  : {comment.commentText} {useMoscowDate(comment.created_at)}
-                </p>
+                <div
+                  key={comment.commentId}
+                  className={styles.commentContainer}
+                >
+                  <div className={styles.commentHeader}>
+                    <span className={styles.nickname}>
+                      {comment.User.nickname}
+                    </span>
+                    <span className={styles.commentDate}>
+                      {useMoscowDate(comment.created_at)}
+                    </span>
+                  </div>
+                  <p className={styles.commentText}>{comment.commentText}</p>
+                </div>
               ))
             ) : (
               <p>У поста пока нет комментариев, самое время его оставить</p>
             )}
           </div>
         )}
-
         <CommentForm enabled={user.user !== null} postId={postId} />
       </div>
     </>
