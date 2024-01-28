@@ -23,8 +23,6 @@ const CommentForm = ({
     mode: 'onChange',
   });
 
-  console.log(postId);
-
   const addComment = useAddComment(postId);
 
   const onSubmit: SubmitHandler<
