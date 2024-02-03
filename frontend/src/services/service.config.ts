@@ -7,6 +7,7 @@ import { PostEndPoint } from './post/post.config';
 import { RatingEndPoint } from './rating/rating.config';
 import { UserEndPoint } from './user/user.config';
 import { FavoritesEndPoint } from './favorites/favorites.config';
+import { SocialNetworkEndPoint } from './socialNetwork/socialNetwork.config';
 
 export enum HttpMethods {
   GET = 'GET',
@@ -23,7 +24,8 @@ type typeEndPoint =
   | PostEndPoint
   | RatingEndPoint
   | UserEndPoint
-  | FavoritesEndPoint;
+  | FavoritesEndPoint
+  | SocialNetworkEndPoint;
 
 export const createRequestConfig = (
   method: HttpMethods,
