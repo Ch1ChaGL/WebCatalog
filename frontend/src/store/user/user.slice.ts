@@ -63,6 +63,13 @@ export const userSlice = createSlice({
       .addCase(updateUserInformation.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.user = payload;
+      })
+      .addCase(updateUserInformation.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.user = null;
+      })
+      .addCase(updateUserInformation.pending, state => {
+        state.isLoading = true;
       });
   },
 });

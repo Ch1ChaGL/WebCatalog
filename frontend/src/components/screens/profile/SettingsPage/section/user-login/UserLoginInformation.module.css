@@ -1,0 +1,8 @@
+.btns {
+  display: flex;
+  gap: 10px;
+}
+
+.firstForm {
+  margin-bottom: 10px;
+}

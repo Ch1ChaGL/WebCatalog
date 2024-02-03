@@ -230,6 +230,7 @@ export class UsersService {
     userId: number,
     partialUserData: Partial<UserUpdateDto>,
   ) {
+    const { socialNetwork, ...userData } = partialUserData;
     const user = await this.prisma.user.findUnique({
       where: {
         userId: userId,
@@ -239,7 +240,10 @@ export class UsersService {
     if (!user)
       throw new BadRequestException(`Пользователь с ID ${userId} не найден`);
 
-    if (partialUserData.nickname) {
+    if (
+      partialUserData.nickname !== user.nickname &&
+      partialUserData.nickname !== undefined
+    ) {
       const hasUser = await this.prisma.user.findUnique({
         where: { nickname: partialUserData.nickname },
       });
@@ -250,14 +254,42 @@ export class UsersService {
         );
     }
 
-    const hashedPassword = await hash(partialUserData.password);
+    const hashedPassword = partialUserData.password
+      ? await hash(partialUserData.password)
+      : null;
 
-    await this.prisma.user.update({
+    if (partialUserData.socialNetwork) {
+      const socialNetworks = await this.prisma.socialNetwork.findMany();
+
+      socialNetworks.map(
+        async sn =>
+          await this.prisma.userSocialNetwork.deleteMany({
+            where: {
+              userId: userId,
+              socialNetworkId: sn.socialNetworkId,
+            },
+          }),
+      );
+      // -- Удаление данных о предыдущих социальных сетях
+
+      socialNetwork.map(
+        async sn =>
+          await this.prisma.userSocialNetwork.createMany({
+            data: {
+              userId: userId,
+              socialNetworkId: sn.socialNetworkId,
+              link: sn.link,
+            },
+          }),
+      );
+    }
+
+    const updatedUser = await this.prisma.user.update({
       where: {
         userId: userId,
       },
       data: {
-        ...partialUserData,
+        ...userData,
         password: hashedPassword ? hashedPassword : user.password,
       },
     });

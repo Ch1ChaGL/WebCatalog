@@ -12,7 +12,7 @@ export enum HttpMethods {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
-  PATH = 'PATH',
+  PATCH = 'PATCH',
   DELETE = 'DELETE',
 }
 

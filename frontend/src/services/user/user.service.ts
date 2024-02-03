@@ -29,7 +29,7 @@ export const UserService = {
   async banUserToggle(data: Ban, userId: string): Promise<boolean> {
     const response = await instance<boolean>(
       createRequestConfig(
-        HttpMethods.PATH,
+        HttpMethods.PATCH,
         UserEndPoint.BUN_USER_TOGGLE,
         data,
         userId,
@@ -45,7 +45,7 @@ export const UserService = {
   ): Promise<IUser> {
     const response = await instance<IUser>(
       createRequestConfig(
-        HttpMethods.PATH,
+        HttpMethods.PATCH,
         UserEndPoint.UPDATE_USER_PATCH,
         data,
         userId,

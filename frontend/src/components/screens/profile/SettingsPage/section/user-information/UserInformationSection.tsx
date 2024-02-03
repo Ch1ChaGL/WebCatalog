@@ -6,6 +6,7 @@ import { Button } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { useActions } from '@/hooks/useActions';
+import Loader from '@/components/ui/Loader/Loader';
 
 interface IUserInformationData {
   firstName: string;
@@ -14,7 +15,7 @@ interface IUserInformationData {
 }
 
 const UserInformationSection = () => {
-  const { user } = useTypedSelector(state => state.user);
+  const { user, isLoading } = useTypedSelector(state => state.user);
   const { updateUserInformation } = useActions();
   const {
     register,
@@ -29,6 +30,10 @@ const UserInformationSection = () => {
     updateUserInformation({ ...data, userId: Number(user?.userId) });
     reset();
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div>
