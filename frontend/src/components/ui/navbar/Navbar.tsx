@@ -24,9 +24,6 @@ const Navbar = () => {
         <Button src='/icon/catalogIcon.svg' href={'/'}>
           Каталог
         </Button>
-        <Button src='/icon/faworites.png' href={'/favorites'}>
-          Избранное
-        </Button>
         <Button src='/icon/lk.png' href={'/profile'}>
           Личный кабинет
         </Button>

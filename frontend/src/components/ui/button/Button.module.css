@@ -2,7 +2,7 @@
   max-width: 170px;
   width: 100%;
   padding: 10px;
-  flex: 1 1 170px;
+  flex: 0 1 170px;
   background-color: var(--light-pink);
   border-radius: 4px;
   transition: all 0.3s ease;

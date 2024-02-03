@@ -13,7 +13,6 @@ import { useMoscowDate } from '@/hooks/useMoscowDate';
 import CommentForm from '@/components/ui/CommentForm/CommentForm';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import {
-  useFavorites,
   useIsFavorites,
   useToggleFavorites,
 } from '@/hooks/favorites/useFavorites';
@@ -63,8 +62,8 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
     });
   };
 
-  const rate = (rate: number) => {
-    if (!user.user) return;
+  const rate = (rate: number, index: number, event: any) => {
+    if (!user.user || event === undefined) return;
     rating.mutate({ rate: rate, userId: user.user.userId as number });
   };
 
@@ -100,7 +99,7 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
               )}
             </div>
           </div>
-          <PostRating rating={data.rating}/>
+          <PostRating rating={data.rating} />
           <Rating
             initialValue={data.rating}
             allowFraction={true}

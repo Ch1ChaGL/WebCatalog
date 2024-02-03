@@ -5,5 +5,5 @@ export enum UserEndPoint {
   GET_USER_BY_ID = `${BASE_URL}/`,
   DELETE_USER_BY_ID = `${BASE_URL}/`,
   BUN_USER_TOGGLE = `${BASE_URL}/toggleBan/`,
-  UPDATE_USER_PATCH = `${BASE_URL}`,
+  UPDATE_USER_PATCH = `${BASE_URL}/`,
 }

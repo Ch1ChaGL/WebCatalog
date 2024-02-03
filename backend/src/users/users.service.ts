@@ -41,7 +41,7 @@ export class UsersService {
       },
     });
 
-    if (oldUser)
+    if (oldUser && dto.nickname)
       throw new BadRequestException({
         message:
           'Пользователь с таким email уже зарегестрирован. Попробуйте снова, используя другой email',
@@ -250,7 +250,7 @@ export class UsersService {
         );
     }
 
-    const hashedPassword = await hash(user.password);
+    const hashedPassword = await hash(partialUserData.password);
 
     await this.prisma.user.update({
       where: {

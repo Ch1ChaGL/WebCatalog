@@ -43,7 +43,7 @@ export class AuthService {
     };
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto): Promise<any> {
     const exist = await this.userService.getUserByEmail(dto.email);
     if (!exist)
       throw new BadRequestException('Пользователя с таким email не существует');

@@ -17,6 +17,7 @@ const FavoritesPage = () => {
   return (
     <>
       <div>
+        <div className={styles.title}>Избранное</div>
         <div className={styles.posts}>
           {favorites.data.map(favorite => (
             <PostCard {...favorite} key={favorite.postId} />

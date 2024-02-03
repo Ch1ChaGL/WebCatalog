@@ -1,0 +1,13 @@
+.profile-layout {
+  display: grid;
+  grid-template-columns: 235px 5fr; /* Ширина сайдбара и контентной части */
+  gap: 20px; /* Расстояние между сайдбаром и контентной частью */
+}
+
+.content {
+  padding: 20px;
+}
+
+.sidebar{
+
+}

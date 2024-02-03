@@ -32,6 +32,7 @@ export interface IAuthResponse extends IToken {
 }
 
 export interface IUserUpdate {
+  userId: number;
   nickname?: string;
   firstName?: string;
   lastName?: string;

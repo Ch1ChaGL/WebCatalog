@@ -39,7 +39,10 @@ export const UserService = {
     return response.data;
   },
 
-  async updateUser(data: IUserUpdate, userId: string): Promise<IUser> {
+  async updateUser(
+    data: Omit<IUserUpdate, 'userId'>,
+    userId: string,
+  ): Promise<IUser> {
     const response = await instance<IUser>(
       createRequestConfig(
         HttpMethods.PATH,
@@ -48,7 +51,7 @@ export const UserService = {
         userId,
       ),
     );
-
+    console.log('я отправил запрос');
     return response.data;
   },
 };

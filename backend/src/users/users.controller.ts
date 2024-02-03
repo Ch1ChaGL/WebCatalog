@@ -21,10 +21,11 @@ import { UserUpdateDto } from './dto/user.update.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UsePipes(new ValidationPipe())
   @Post('create')
   @HttpCode(200)
+  @UsePipes(new ValidationPipe())
   async createUser(@Body() dto: UserCreateDto) {
+    console.log(dto);
     return await this.usersService.createUser(dto);
   }
 
@@ -64,6 +65,7 @@ export class UsersController {
     @Param('id') userId,
     @Body() updatedUserData: Partial<UserUpdateDto>,
   ) {
+    console.log('update backend');
     return await this.usersService.partialUpdateUser(+userId, updatedUserData);
   }
 }

@@ -7,3 +7,10 @@
   row-gap: 20px;
   column-gap: 20px;
 }
+
+.title{
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--primary-pink);
+}

@@ -1,6 +1,12 @@
 import { AsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IInitialState } from './user.interface';
-import { checkAuth, login, logout, register } from './user.action';
+import {
+  checkAuth,
+  login,
+  logout,
+  register,
+  updateUserInformation,
+} from './user.action';
 import { getLocalStorage } from '@/utils/local-storage';
 
 export const initialState: IInitialState = {
@@ -53,6 +59,10 @@ export const userSlice = createSlice({
       })
       .addCase(logout.pending, state => {
         state.user = null;
+      })
+      .addCase(updateUserInformation.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.user = payload;
       });
   },
 });
