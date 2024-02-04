@@ -128,11 +128,13 @@ const PostPage: FC<PostPageProps> = ({ postId }) => {
           Найти меня в соц сетях:
         </div>
         <div className={styles.createrBlock__categoriesBox}>
-          {data.user.socialNetwork.map(category => (
-            <a href={category.link}>
-              <img src={usePostImage(category.iconPath)} />
-            </a>
-          ))}
+          {data.user.socialNetwork
+            .filter(socialNetwork => socialNetwork.link !== '')
+            .map(category => (
+              <a href={category.link}>
+                <img src={usePostImage(category.iconPath)} className={styles.socialNetwork__img}/>
+              </a>
+            ))}
         </div>
       </div>
 

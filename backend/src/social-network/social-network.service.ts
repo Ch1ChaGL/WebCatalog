@@ -74,6 +74,7 @@ export class SocialNetworkService {
     socialNetworkId: number,
     link: string,
   ): Promise<UserSocialNetwork> {
+    console.log(socialNetworkId);
     const existSocialNetwork = await this.getSocialNetwork(socialNetworkId);
 
     if (!existSocialNetwork)
@@ -113,5 +114,27 @@ export class SocialNetworkService {
     });
 
     return createdSocialNetwork;
+  }
+
+  async updateUserSocialNetworks(data: any) {
+    const { userId, ...socialNetworkData } = data;
+
+    const { socialNetwork } = await this.userService.getUserById(userId);
+
+    for (const socialNetworkId in socialNetworkData) {
+      const link = socialNetworkData[socialNetworkId];
+
+      const index = socialNetwork.findIndex(
+        sn => String(sn.socialNetworkId) === socialNetworkId,
+      );
+
+      if (index === -1) {
+        await this.addSocialNetwork(userId, Number(socialNetworkId), link);
+      }
+
+      await this.updateUserSocialNetwork(userId, Number(socialNetworkId), link);
+    }
+
+    return true;
   }
 }

@@ -5,9 +5,15 @@ import { useSocialNetwork } from '@/hooks/socialNetwork/useSocialNetwork';
 import Field from '@/components/ui/input/Field';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
+import { SocialNetworkService } from '@/services/socialNetwork/socialNetwork.service';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { useActions } from '@/hooks/useActions';
+import Loader from '@/components/ui/Loader/Loader';
 
 const UserSocialNetworksInformation = () => {
   const { data } = useSocialNetwork();
+  const { user, isLoading } = useTypedSelector(state => state.user);
+  const { revalidateUser, login } = useActions();
 
   const {
     register,
@@ -19,21 +25,33 @@ const UserSocialNetworksInformation = () => {
   });
 
   const onSubmit: SubmitHandler<any> = (data: any) => {
-    console.log(data);
-    reset();
+    data.userId = user?.userId;
+
+    SocialNetworkService.updateSocialNetwork(data).then(() => {
+      revalidateUser(String(user?.userId));
+      reset();
+    });
   };
+
+  if (isLoading) return <Loader />;
 
   return (
     <div>
       <Section title='Социальные сети'>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {data.map(value => (
-            <Field
-              text={value.socialNetworkName}
-              key={value.socialNetworkId}
-              {...register(`socialNetworks.${value.socialNetworkName}`)}
-            />
-          ))}
+          {data.map(value => {
+            const link = user?.socialNetwork.find(
+              network => network.socialNetworkId === value.socialNetworkId,
+            )?.link;
+
+            return (
+              <Field
+                text={value.socialNetworkName}
+                key={value.socialNetworkId}
+                {...register(`${value.socialNetworkId}`, { value: link })}
+              />
+            );
+          })}
           <div className={styles.btns}>
             <Button color='secondary' variant='outlined' type='submit'>
               Сохранить

@@ -11,4 +11,16 @@ export const SocialNetworkService = {
 
     return response.data;
   },
+
+  async updateSocialNetwork(data: any) {
+    const response = await instance(
+      createRequestConfig(
+        HttpMethods.PATCH,
+        SocialNetworkEndPoint.UPDATE_SOCIALNETWORK,
+        data,
+      ),
+    );
+
+    return response.data;
+  },
 };

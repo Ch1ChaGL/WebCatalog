@@ -6,6 +6,8 @@ import { useActions } from '@/hooks/useActions';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '@mui/material';
 import Loader from '@/components/ui/Loader/Loader';
+import { useState } from 'react';
+import CustomAlert from '@/components/ui/customAlert/CustomAlert';
 
 interface IUserEmail {
   email: string;
@@ -16,8 +18,8 @@ interface IUserUpdatePassword {
 }
 
 const UserLoginInformation = () => {
-  const { user, isLoading } = useTypedSelector(state => state.user);
-  const { updateUserInformation } = useActions();
+  const { user, isLoading, error } = useTypedSelector(state => state.user);
+  const { updateUserInformation, clearError } = useActions();
   const {
     register,
     handleSubmit,
@@ -26,6 +28,11 @@ const UserLoginInformation = () => {
   } = useForm<IUserEmail>({
     mode: 'onChange',
   });
+
+  const [errorPopup, setErrorPopup] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
 
   const {
     register: registerPassword,
@@ -51,6 +58,15 @@ const UserLoginInformation = () => {
     resetPassword();
   };
 
+  if (error !== null) {
+    setErrorPopup({ title: 'Произошла ошибка', message: error });
+    clearError();
+  }
+  const handlePopupClose = () => {
+    setErrorPopup(null);
+    // Assuming you have a clearError action in your useActions hook
+  };
+
   if (isLoading) return <Loader />;
 
   return (
@@ -71,6 +87,15 @@ const UserLoginInformation = () => {
               Сбросить
             </Button>
           </div>
+          {errorPopup && (
+            <CustomAlert
+              type='error'
+              title='Ошибка'
+              description={errorPopup.message}
+              open={Boolean(errorPopup)}
+              onClose={handlePopupClose}
+            />
+          )}
         </form>
 
         <form onSubmit={handleSubmitPassword(onSubmitPassword)}>

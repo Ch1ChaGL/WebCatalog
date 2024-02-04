@@ -9,7 +9,6 @@ import {
 import { AuthService } from '@/services/auth/auth.service';
 import { AuthEndPoint } from '@/services/auth/auth.config';
 import { errorCatch } from '@/app/api/api.helper';
-import { redirect } from 'next/navigation';
 import { IUser } from '@/types/user.interface';
 import { UserService } from '@/services/user/user.service';
 
@@ -32,6 +31,19 @@ export const login = createAsyncThunk<IAuthResponse, ILoginData>(
   async (data, thunkAPI) => {
     try {
       const response = await AuthService.main(AuthEndPoint.Login, data);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const revalidateUser = createAsyncThunk<IUser, string>(
+  'user/',
+  async (userId, thunkAPI) => {
+    try {
+      const response = await UserService.getUserById(userId);
       return response;
     } catch (error) {
       console.log(error);

@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -31,5 +32,10 @@ export class SocialNetworkController {
   @Get('')
   async getAllSocialNetwork() {
     return await this.socialNetworkService.getAllSocialNetwork();
+  }
+
+  @Patch('')
+  async updateUserSocialNetworks(@Body() data) {
+    return await this.socialNetworkService.updateUserSocialNetworks(data);
   }
 }

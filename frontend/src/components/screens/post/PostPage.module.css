@@ -161,3 +161,12 @@
   line-height: 1.4;
   color: #333;
 }
+
+.createrBlock__categoriesBox {
+  display: flex;
+  align-items: baseline;
+}
+
+.socialNetwork__img {
+  width: 50px;
+}

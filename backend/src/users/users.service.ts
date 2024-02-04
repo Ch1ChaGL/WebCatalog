@@ -240,6 +240,13 @@ export class UsersService {
     if (!user)
       throw new BadRequestException(`Пользователь с ID ${userId} не найден`);
 
+    if (userData.email) {
+      const oldUser = await this.getUserByEmail(userData.email);
+      if (oldUser)
+        throw new BadRequestException(
+          `Пользователь с email ${oldUser.email} уже зарегестрирован`,
+        );
+    }
     if (
       partialUserData.nickname !== user.nickname &&
       partialUserData.nickname !== undefined

@@ -65,7 +65,6 @@ export class UsersController {
     @Param('id') userId,
     @Body() updatedUserData: Partial<UserUpdateDto>,
   ) {
-    console.log('update backend');
     return await this.usersService.partialUpdateUser(+userId, updatedUserData);
   }
 }

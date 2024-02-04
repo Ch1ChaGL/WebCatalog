@@ -5,6 +5,7 @@ import {
   login,
   logout,
   register,
+  revalidateUser,
   updateUserInformation,
 } from './user.action';
 import { getLocalStorage } from '@/utils/local-storage';
@@ -66,10 +67,21 @@ export const userSlice = createSlice({
       })
       .addCase(updateUserInformation.rejected, (state, { payload }: any) => {
         state.isLoading = false;
-        state.user = null;
+        state.error = payload.response.data.message;
       })
       .addCase(updateUserInformation.pending, state => {
         state.isLoading = true;
+      })
+      .addCase(revalidateUser.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(revalidateUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.user = payload;
+      })
+      .addCase(revalidateUser.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.error = payload.response.data.message;
       });
   },
 });
