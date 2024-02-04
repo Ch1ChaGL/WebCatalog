@@ -12,8 +12,15 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 const openPostPage = (postId: number, router: AppRouterInstance) => {
   router.push(`/post/${postId}`);
 };
+const openPostRedactPage = (postId: number, router: AppRouterInstance) => {
+  router.push(`/post/redact/${postId}`);
+};
 
-const PostCard: React.FC<IPost> = props => {
+interface PostCardProps extends IPost {
+  type: 'public' | 'private';
+}
+
+const PostCard: React.FC<PostCardProps> = props => {
   const imagePath = usePostCardImagePath(props.postImage);
   const router = useRouter();
   return (
@@ -31,11 +38,22 @@ const PostCard: React.FC<IPost> = props => {
       <div className={styles.PostCard__description}>
         {hideLongText(upperFirstLetter(props.description), 50)}
       </div>
-      <div
-        className={styles.button}
-        onClick={() => openPostPage(props.postId, router)}
-      >
-        Подробнее...
+
+      <div className={styles['btns']}>
+        <div
+          className={styles.button}
+          onClick={() => openPostPage(props.postId, router)}
+        >
+          Подробнее...
+        </div>
+        {props.type === 'private' && (
+          <div
+            className={styles.redactButton}
+            onClick={() => openPostRedactPage(props.postId, router)}
+          >
+            Редактировать
+          </div>
+        )}
       </div>
     </div>
   );

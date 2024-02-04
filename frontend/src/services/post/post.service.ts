@@ -59,7 +59,7 @@ export const PostService = {
   async toggleBanPost(postId: string): Promise<boolean> {
     const response = await instance<boolean>(
       createRequestConfig(
-        HttpMethods.PATH,
+        HttpMethods.PATCH,
         PostEndPoint.TOGGLE_BAN,
         null,
         postId,
@@ -71,7 +71,7 @@ export const PostService = {
 
   async updatePost(postId: string, data: PostUpdate): Promise<IPost> {
     const response = await instance<IPost>(
-      createRequestConfig(HttpMethods.PATH, PostEndPoint.UPDATE, data, postId),
+      createRequestConfig(HttpMethods.PATCH, PostEndPoint.UPDATE, data, postId),
     );
 
     return response.data;
@@ -86,6 +86,19 @@ export const PostService = {
         postId,
       ),
     );
+    return response.data;
+  },
+
+  async getPostsByUserId(userId: number): Promise<IPost[]> {
+    const response = await instance<IPost[]>(
+      createRequestConfig(
+        HttpMethods.GET,
+        PostEndPoint.GET_POST_BY_USER_ID,
+        null,
+        String(userId),
+      ),
+    );
+
     return response.data;
   },
 };

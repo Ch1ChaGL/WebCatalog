@@ -70,5 +70,10 @@ export class PostController {
     return await this.postService.updatePost(+postId, dto, images);
   }
 
+  @Get('user-posts/:id')
+  async getPostsByUserId(@Param('id') userId: string) {
+    return await this.postService.getPostByUserId(userId);
+  }
+
   //TODO удаление поста
 }

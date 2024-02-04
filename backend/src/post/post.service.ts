@@ -269,4 +269,63 @@ export class PostService {
 
     return await this.getPostById(postId);
   }
+
+  async getPostByUserId(userId: string): Promise<CreatedPost[] | null> {
+    try {
+      const posts = await this.prisma.post.findMany({
+        where: {
+          userPost: {
+            some: {
+              userId: Number(userId),
+            },
+          },
+        },
+        include: {
+          categoryPost: {
+            select: {
+              categoryId: true,
+              Category: {
+                select: {
+                  categoryName: true,
+                },
+              },
+            },
+          },
+          postImage: true,
+        },
+      });
+
+      const formattedPosts = await Promise.all(
+        posts.map(async post => {
+          const { categoryPost, ...rest } = post;
+
+          const userPost = await this.prisma.userPost.findFirst({
+            where: { postId: rest.postId },
+          });
+
+          const user = await this.userService.getUserById(userPost.userId);
+
+          let categories = post.categoryPost.map(category => ({
+            categoryId: category.categoryId,
+            categoryName: category.Category.categoryName,
+          }));
+
+          categories = categories.sort((a, b) => a.categoryId - b.categoryId);
+          const rating = await this.ratingService.getRate(post.postId);
+
+          return {
+            ...rest,
+            categories,
+            user,
+            rating,
+          };
+        }),
+      );
+
+      return formattedPosts;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      return null;
+    }
+  }
 }

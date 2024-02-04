@@ -7,4 +7,5 @@ export enum PostEndPoint {
   TOGGLE_BAN = `${BASE_URL}/toggleBan/`,
   UPDATE = `${BASE_URL}/update/`,
   DELETE = `${BASE_URL}/delete/`,
+  GET_POST_BY_USER_ID = `${BASE_URL}/user-posts/`,
 }

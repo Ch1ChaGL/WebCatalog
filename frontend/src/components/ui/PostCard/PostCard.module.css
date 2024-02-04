@@ -59,3 +59,34 @@
   color: var(--primary-pink);
   border: 2px solid black;
 }
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.redactButton {
+  align-self: flex-start;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgb(105, 180, 255);
+  background: linear-gradient(
+    to right,
+    rgb(105, 180, 255) 50%,
+    rgba(239, 163, 87, 0.2) 50%
+  );
+  background-size: 200% 100%;
+  transition: all 0.4s ease-in;
+}
+
+.redactButton:hover {
+  background-position: -100% 0;
+  color: #324132;
+  border: 2px solid black;
+}

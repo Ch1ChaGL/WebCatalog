@@ -20,7 +20,7 @@ const HomePage: FC = () => {
       <div>
         <div className={styles.posts}>
           {posts.data.map(post => (
-            <PostCard {...post} key={post.postId} />
+            <PostCard {...post} key={post.postId} type='public'/>
           ))}
         </div>
       </div>
