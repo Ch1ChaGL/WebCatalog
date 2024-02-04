@@ -18,4 +18,8 @@ export class CategoryService {
 
     return createdCategory;
   }
+
+  async getAll(): Promise<Category[]> {
+    return await this.prisma.category.findMany();
+  }
 }

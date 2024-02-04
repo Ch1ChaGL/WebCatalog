@@ -37,7 +37,7 @@ export class PostService {
     await this.prisma.userPost.create({
       data: {
         postId: createdPost.postId,
-        userId: userId,
+        userId: Number(userId),
       },
     });
 
@@ -144,6 +144,8 @@ export class PostService {
           const userPost = await this.prisma.userPost.findFirst({
             where: { postId: rest.postId },
           });
+
+          console.log(userPost);
 
           const user = await this.userService.getUserById(userPost.userId);
 

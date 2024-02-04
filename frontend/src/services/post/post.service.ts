@@ -8,7 +8,7 @@ export const PostService = {
     const formData = new FormData();
 
     // Добавляем поля из IPostCreate в FormData
-    formData.append('PostName', data.PostName);
+    formData.append('postName', data.postName);
     formData.append('banned', JSON.stringify(data.banned));
     formData.append('description', data.description);
     formData.append('link', data.link);
@@ -21,6 +21,8 @@ export const PostService = {
         formData.append('images', image);
       });
     }
+
+    console.log(formData)
 
     const response = await instance<IPost>({
       method: HttpMethods.POST,

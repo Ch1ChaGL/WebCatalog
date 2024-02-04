@@ -1,6 +1,7 @@
+import { IPostCreate } from '@/services/post/post.interface';
 import { PostService } from '@/services/post/post.service';
 import { IPost } from '@/types/post.interface';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const usePost = (postId: string) => {
   const { data, isError, isSuccess, isFetching } = useQuery({
@@ -10,4 +11,19 @@ export const usePost = (postId: string) => {
   });
 
   return { data, isFetching, isError, isSuccess };
+};
+
+export const useCreatePost = (userId: number) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (data: IPostCreate) => PostService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`get user post ${userId}`],
+      });
+    },
+  });
+
+  return mutation;
 };

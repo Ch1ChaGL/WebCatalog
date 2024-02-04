@@ -50,8 +50,8 @@ model UserSocialNetwork {
   userId          Int           @map("user_id")
   socialNetworkId Int           @map("social_network_id")
   link            String
-  SocialNetwork   SocialNetwork @relation(fields: [socialNetworkId], references: [socialNetworkId])
-  User            User          @relation(fields: [userId], references: [userId])
+  SocialNetwork   SocialNetwork @relation(fields: [socialNetworkId], references: [socialNetworkId], onDelete: Cascade, onUpdate: Cascade)
+  User            User          @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userId, socialNetworkId])
 }
@@ -65,8 +65,8 @@ model Category {
 model CategoryPost {
   categoryId Int      @map("category_id")
   postId     Int      @map("post_id")
-  Category   Category @relation(fields: [categoryId], references: [categoryId])
-  Post       Post     @relation(fields: [postId], references: [postId])
+  Category   Category @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade, onUpdate: Cascade)
+  Post       Post     @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([categoryId, postId])
 }
@@ -89,8 +89,8 @@ model Post {
 model UserPost {
   postId Int  @map("post_id")
   userId Int  @map("user_id")
-  User   User @relation(fields: [userId], references: [userId])
-  Post   Post @relation(fields: [postId], references: [postId])
+  User   User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  Post   Post @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([postId, userId])
 }
@@ -99,8 +99,8 @@ model Faworites {
   postId Int @map("post_id")
   userId Int @map("user_id")
 
-  User User @relation(fields: [userId], references: [userId])
-  Post Post @relation(fields: [postId], references: [postId])
+  User User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  Post Post @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([postId, userId])
 }
@@ -110,7 +110,7 @@ model PostImage {
   postId      Int    @map("post_id")
   filePath    String @map("file_path")
   order       Int
-  Post        Post   @relation(fields: [postId], references: [postId])
+  Post        Post   @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Comment {
@@ -119,16 +119,16 @@ model Comment {
   postId      Int      @map("post_id")
   created_at  DateTime
   commentText String   @map("comment_text")
-  User        User     @relation(fields: [userId], references: [userId])
-  Post        Post     @relation(fields: [postId], references: [postId])
+  User        User     @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  Post        Post     @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Rating {
   userId Int   @map("user_id")
   postId Int   @map("post_id")
   rating Float
-  User   User  @relation(fields: [userId], references: [userId])
-  Post   Post  @relation(fields: [postId], references: [postId])
+  User   User  @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  Post   Post  @relation(fields: [postId], references: [postId], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userId, postId])
 }

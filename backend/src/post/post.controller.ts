@@ -26,7 +26,6 @@ export class PostController {
 
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Auth()
   @Post('create')
   @UseInterceptors(FilesInterceptor('images'))
   async createPost(@Body() dto: PostCreateDto, @UploadedFiles() images: any[]) {
@@ -35,6 +34,7 @@ export class PostController {
     dto.categoryIds = JSON.parse(dto.categoryIds.toString());
     dto.userId = JSON.parse(dto.userId.toString());
 
+    console.log(dto.postName);
     return await this.postService.createPost(dto, dto.userId, images);
   }
 

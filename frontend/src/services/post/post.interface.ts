@@ -1,10 +1,10 @@
 export interface IPostCreate {
   images: File[];
-  PostName: string;
+  postName: string;
   banned: boolean;
   description: string;
   link: string;
-  categoryIds: number[];
+  categoryIds: number[] | { categoryId: string };
   userId: string;
 }
 
