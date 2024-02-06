@@ -4,14 +4,14 @@ export interface IPostCreate {
   banned: boolean;
   description: string;
   link: string;
-  categoryIds: number[] | { categoryId: string };
+  categoryIds: number[] | { categoryId: string }[];
   userId: string;
 }
 
 export interface PostUpdate {
-  postName?: string;
-  description?: string;
-  link?: string;
-  categoryIds?: number[];
-  imagesDelete?: boolean;
+  postName: string;
+  description: string;
+  link: string;
+  categoryIds: number[] | { categoryId: string }[];
+  imagesDelete: boolean;
 }

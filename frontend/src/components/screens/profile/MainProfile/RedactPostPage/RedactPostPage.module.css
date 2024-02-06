@@ -1,0 +1,69 @@
+.modal__container {
+  max-width: 1000px;
+  width: 100%;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--primary-pink);
+}
+
+.description {
+  margin-bottom: 10px;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
+  max-width: 1000px;
+  width: 100%;
+  border: 2px solid var(--light-pink);
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.description:focus {
+  border-color: var(--primary-pink);
+}
+
+.categoryContainer {
+  margin: 20px 0px;
+}
+
+.categoryList {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Стили для каждого чекбокса и метки в двух колонках */
+.categoryList div {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+/* Стили для чекбокса */
+.categoryList input {
+  margin-right: 5px;
+}
+
+/* Стили для метки */
+.categoryList label {
+  cursor: pointer; /* Добавим стиль указывающий, что элемент можно "кликнуть" */
+  flex-grow: 1; /* Растягиваем метку, чтобы занять всю доступную ширину */
+}

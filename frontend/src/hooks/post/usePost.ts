@@ -1,4 +1,4 @@
-import { IPostCreate } from '@/services/post/post.interface';
+import { IPostCreate, PostUpdate } from '@/services/post/post.interface';
 import { PostService } from '@/services/post/post.service';
 import { IPost } from '@/types/post.interface';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -23,6 +23,14 @@ export const useCreatePost = (userId: number) => {
         queryKey: [`get user post ${userId}`],
       });
     },
+  });
+
+  return mutation;
+};
+
+export const useUpdatePost = (postId: string) => {
+  const mutation = useMutation({
+    mutationFn: (data: PostUpdate) => PostService.updatePost(postId, data),
   });
 
   return mutation;
