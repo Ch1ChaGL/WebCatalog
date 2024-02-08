@@ -22,11 +22,31 @@ export const PostService = {
       });
     }
 
-    console.log(formData)
-
     const response = await instance<IPost>({
       method: HttpMethods.POST,
       url: PostEndPoint.CREATE,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  },
+
+  async updatePostImage(data: { images: File[]; postId: string }) {
+    const formData = new FormData();
+
+    // Добавляем файлы, если они есть
+    if (data.images && data.images.length > 0) {
+      data.images.forEach(image => {
+        formData.append('images', image);
+      });
+    }
+
+    const response = await instance<IPost>({
+      method: HttpMethods.PATCH,
+      url: PostEndPoint.UPDATE + data.postId,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',

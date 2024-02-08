@@ -1,7 +1,11 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './RedactPostPage.module.css';
-import { usePost, useUpdatePost } from '@/hooks/post/usePost';
+import {
+  usePost,
+  useUpdateImagePost,
+  useUpdatePost,
+} from '@/hooks/post/usePost';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { redirect } from 'next/navigation';
 import Loader from '@/components/ui/Loader/Loader';
@@ -10,12 +14,18 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Field from '@/components/ui/input/Field';
 import { Button } from '@mui/material';
 import { useCategory } from '@/hooks/category/useCategory';
+import CustomAlert from '@/components/ui/customAlert/CustomAlert';
 
 const RedactPostPage = ({ postId }: { postId: string }) => {
   const { data, isFetching } = usePost(postId);
   const { user } = useTypedSelector(state => state.user);
   const { data: category } = useCategory();
   const mutation = useUpdatePost(String(data.postId));
+  const mutateImage = useUpdateImagePost(String(data.postId));
+  const [successPopup, setSuccessPopup] = useState<{
+    title: string;
+    message: string;
+  } | null>(null);
 
   const {
     register,
@@ -27,32 +37,29 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
     mode: 'onChange',
   });
 
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log('useeffect data', data);
-  //     setValue('postName', data.postName);
-  //     setValue('description', data.description);
-  //     setValue('link', data.link);
+  const {
+    register: imageRegister,
+    handleSubmit: imageHandleSubmit,
+    formState: { errors: imageErrors },
+    setValue: imageSetValue,
+  } = useForm<{ images: File[] }>({
+    mode: 'onChange',
+  });
 
-  //     const selectedCategories = data.categories?.reduce((acc, category) => {
-  //       //@ts-ignore
-  //       acc[`categoryIds.${category.categoryId}`] = true;
-  //       return acc;
-  //     }, {});
-  //     //@ts-ignore
-  //     setValue('categoryIds', selectedCategories);
-  //   }
-  // }, [data, setValue]);
-
-  // console.log(data);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // Обработка выбора нескольких файлов
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      // Прокидываем выбранные файлы в react-hook-form
+      imageSetValue('images', Array.from(selectedFiles));
+    }
+  };
 
   const onSubmit: SubmitHandler<PostUpdate> = data => {
     console.log('data', data);
     const selectedCategories = Object.entries(data.categoryIds)
       .filter(([_, isSelected]) => isSelected)
       .map(([categoryId]) => ({ categoryId }));
-
-    console.log(selectedCategories);
 
     const categoryIds = [];
     for (const category of selectedCategories) {
@@ -61,9 +68,25 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
 
     data.categoryIds = categoryIds;
 
-    console.log(data);
+    mutation.mutate(data);
 
-    // mutation.mutate(data);
+    setSuccessPopup({
+      title: 'Успешно обновлено',
+      message: 'Обновление данных о посте прошло успешно',
+    });
+  };
+
+  const onSubmitImage: SubmitHandler<{ images: File[] }> = data => {
+    mutateImage.mutate(data.images);
+
+    setSuccessPopup({
+      title: 'Успешно обновлено',
+      message: 'Обновление картинок поста прошло успешно',
+    });
+  };
+
+  const handlePopupClose = () => {
+    setSuccessPopup(null);
   };
 
   if (isFetching) return <Loader />;
@@ -71,7 +94,9 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
 
   return (
     <>
-      <div className={styles.title}>Редактирование поста - {data.postName}</div>
+      <div className={styles.title}>
+        Редактирование данных поста - {data.postName}
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Field
           text='Название поста'
@@ -110,6 +135,7 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
               message: 'Длина Ссылки должна быть больше 5 символов',
             },
           })}
+          error={errors.link?.message}
         />
         <div className={styles.categoryContainer}>
           <label>Выберите категории:</label>
@@ -119,12 +145,10 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
                 <input
                   type='checkbox'
                   id={`categoryIds.${category.categoryId}`}
-                  {...(register(`categoryIds.${category.categoryId}`),
-                  {
-                    defaultChecked: data.categories
-                      .map(category => category.categoryId)
-                      .includes(category.categoryId),
-                  })}
+                  {...register(`categoryIds.${category.categoryId}`)}
+                  defaultChecked={data.categories
+                    .map(category => category.categoryId)
+                    .includes(category.categoryId)}
                 />
                 <label htmlFor={`categoryIds.${category.categoryId}`}>
                   {category.categoryName}
@@ -133,10 +157,41 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
             ))}
           </div>
         </div>
+        <div className={styles.btns}>
+          <Button variant='outlined' color='secondary' type='submit'>
+            Сохранить
+          </Button>
+          <Button variant='outlined' color='primary' onClick={() => reset()}>
+            Сбросить
+          </Button>
+        </div>
+      </form>
+
+      <form
+        onSubmit={imageHandleSubmit(onSubmitImage)}
+        className={styles.imageForm}
+      >
+        <label>Выберите файлы: </label>
+        <input
+          type='file'
+          accept='image/*' // Фильтр для выбора только изображений
+          multiple // Разрешение загрузки нескольких файлов
+          onChange={handleFileChange}
+        />
         <Button variant='outlined' color='secondary' type='submit'>
           Сохранить
         </Button>
       </form>
+
+      {successPopup && (
+        <CustomAlert
+          open={Boolean(successPopup)}
+          onClose={handlePopupClose}
+          description={successPopup.message}
+          title={successPopup.title}
+          type='success'
+        />
+      )}
     </>
   );
 };

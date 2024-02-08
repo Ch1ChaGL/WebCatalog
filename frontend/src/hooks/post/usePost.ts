@@ -29,8 +29,31 @@ export const useCreatePost = (userId: number) => {
 };
 
 export const useUpdatePost = (postId: string) => {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: (data: PostUpdate) => PostService.updatePost(postId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`get post ${postId}`],
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useUpdateImagePost = (postId: string) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (images: File[]) =>
+      PostService.updatePostImage({ images, postId }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [`get post ${postId}`],
+      });
+    },
   });
 
   return mutation;

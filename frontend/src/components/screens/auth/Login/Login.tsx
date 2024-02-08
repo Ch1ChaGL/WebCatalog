@@ -34,7 +34,6 @@ export const LoginForm = () => {
     reset();
   };
 
-  // if (data.isLoading) return <Loader />;
   if (data.user) router.replace('/');
   if (data.error !== null) {
     setErrorPopup({ title: 'Произошла ошибка', message: data.error });
