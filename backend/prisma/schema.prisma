@@ -77,6 +77,7 @@ model Post {
   banned       Boolean
   banReason    String?        @map("ban_reason")
   description  String
+  created_at   DateTime       @default(now())
   categoryPost CategoryPost[]
   userPost     UserPost[]
   postImage    PostImage[]
