@@ -28,6 +28,20 @@
 .searchInput {
   width: 100%;
 }
-.searchBtn{
+.nothing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  font-size: 50px;
+  color: var(--primary-pink);
+}
 
+.btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reset {
+  align-self: start;
 }

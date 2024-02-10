@@ -22,6 +22,17 @@ const HomePage: FC = () => {
     setPage(value);
   };
 
+  const reset = () => {
+    setPage(1);
+    setLimit(5);
+    setQuery('');
+    sq('');
+  };
+
+  if (posts.data.posts?.length === 0) {
+    setTimeout(reset, 3000);
+  }
+
   useEffect(() => {
     posts.refetch();
   }, [search.page, search.limit, search.query]);
@@ -54,31 +65,49 @@ const HomePage: FC = () => {
             </Button>
           </div>
         </div>
-        <div className={styles.select}>
-          <Select
-            color='secondary'
-            value={search.limit}
-            onChange={e => {
-              setPage(1);
-              setLimit(e.target.value as number);
-            }}
+        <div className={styles.btns}>
+          <div className={styles.select}>
+            <Select
+              color='secondary'
+              value={search.limit}
+              onChange={e => {
+                setPage(1);
+                setLimit(e.target.value as number);
+              }}
+            >
+              <MenuItem value={5} selected>
+                5
+              </MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
+            </Select>
+          </div>
+          <div className={styles['reset']}>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => reset()}
+            >
+              Сбросить
+            </Button>
+          </div>
+        </div>
+        {posts.data.posts.length > 0 ? (
+          <div
+            className={`${styles.posts} ${
+              search.limit ? styles[`post${search.limit}`] : 5
+            }`}
           >
-            <MenuItem value={5} selected>
-              5
-            </MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-          </Select>
-        </div>
-        <div
-          className={`${styles.posts} ${
-            search.limit ? styles[`post${search.limit}`] : 5
-          }`}
-        >
-          {posts.data.posts.map(post => (
-            <PostCard {...post} key={post.postId} type='public' />
-          ))}
-        </div>
+            {posts.data.posts.map(post => (
+              <PostCard {...post} key={post.postId} type='public' />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.nothing}>
+            Похоже по запросу ничего не найдено...
+          </div>
+        )}
+
         <div className={styles.pagination}>
           <Pagination
             page={search.page}
