@@ -2,11 +2,13 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
   UsePipes,
@@ -19,6 +21,7 @@ import { CurrentUser } from 'src/decorators/user.decotators';
 import { BanToggleDto } from './dto/post.banToggle.dto';
 import { PostUpdateDto } from './dto/post.update.dto';
 import { Auth } from 'src/decorators/auth.decorators';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Controller('post')
 export class PostController {
@@ -44,8 +47,11 @@ export class PostController {
   }
 
   @Get('')
-  async getAllPost() {
-    return await this.postService.getAllPost();
+  async getAllPost(@Query() paginationDto: PaginationDto) {
+    return await this.postService.getAllPosts(
+      paginationDto,
+      paginationDto?.query || '',
+    );
   }
 
   @HttpCode(200)
@@ -75,5 +81,10 @@ export class PostController {
     return await this.postService.getPostByUserId(userId);
   }
 
+  @Delete('delete/:id')
+  async deletePost(@Param('id') postId: string) {
+    console.log('delete post', postId);
+    return await this.postService.deletePost(postId);
+  }
   //TODO удаление поста
 }

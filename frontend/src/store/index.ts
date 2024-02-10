@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { userSlice } from './user/user.slice';
+import { searhSlice } from './search/search.slice';
 
 const persistConfig = {
   key: 'web-catalog',
@@ -12,6 +13,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  search: searhSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

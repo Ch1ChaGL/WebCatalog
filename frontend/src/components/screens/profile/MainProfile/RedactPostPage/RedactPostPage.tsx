@@ -7,17 +7,19 @@ import {
   useUpdatePost,
 } from '@/hooks/post/usePost';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import Loader from '@/components/ui/Loader/Loader';
-import { IPostCreate, PostUpdate } from '@/services/post/post.interface';
+import { PostUpdate } from '@/services/post/post.interface';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Field from '@/components/ui/input/Field';
 import { Button } from '@mui/material';
 import { useCategory } from '@/hooks/category/useCategory';
 import CustomAlert from '@/components/ui/customAlert/CustomAlert';
+import { PostService } from '@/services/post/post.service';
 
 const RedactPostPage = ({ postId }: { postId: string }) => {
   const { data, isFetching } = usePost(postId);
+  const { replace } = useRouter();
   const { user } = useTypedSelector(state => state.user);
   const { data: category } = useCategory();
   const mutation = useUpdatePost(String(data.postId));
@@ -87,6 +89,11 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
 
   const handlePopupClose = () => {
     setSuccessPopup(null);
+  };
+
+  const deletePost = async () => {
+    await PostService.deletePost(postId);
+    replace('/profile');
   };
 
   if (isFetching) return <Loader />;
@@ -182,6 +189,14 @@ const RedactPostPage = ({ postId }: { postId: string }) => {
           Сохранить
         </Button>
       </form>
+
+      <Button
+        variant='outlined'
+        color='error'
+        onClick={async () => await deletePost()}
+      >
+        Удалить пост
+      </Button>
 
       {successPopup && (
         <CustomAlert

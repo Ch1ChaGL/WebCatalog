@@ -3,6 +3,13 @@ import { IPostCreate, PostUpdate } from './post.interface';
 import { instance } from '@/app/api/api.interceptors';
 import { HttpMethods, createRequestConfig } from '../service.config';
 import { PostEndPoint } from './post.config';
+
+export interface IPosts {
+  currentPage: number;
+  totalPosts: number;
+  totalPages: number;
+  posts: IPost[];
+}
 export const PostService = {
   async create(data: IPostCreate): Promise<IPost> {
     const formData = new FormData();
@@ -69,12 +76,22 @@ export const PostService = {
     return response.data;
   },
 
-  async getPosts(): Promise<IPost[]> {
-    const response = await instance<IPost[]>(
-      createRequestConfig(HttpMethods.GET, PostEndPoint.GET_ALL_POSTS),
+  async getPosts(
+    page: number,
+    limit: number,
+    query: string = '',
+  ): Promise<IPosts> {
+    const endPoint =
+      PostEndPoint.GET_ALL_POSTS +
+      `?page=${page}&limit=${limit}&query=${query !== '' ? query : ''}`;
+
+    const response = await instance<IPosts>(
+      createRequestConfig(
+        HttpMethods.GET,
+        endPoint as PostEndPoint.GET_ALL_POSTS,
+      ),
     );
 
-    console.log(response);
     return response.data;
   },
 
@@ -104,7 +121,7 @@ export const PostService = {
       createRequestConfig(
         HttpMethods.DELETE,
         PostEndPoint.DELETE,
-        null,
+        { a: 1 },
         postId,
       ),
     );

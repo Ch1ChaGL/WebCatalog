@@ -1,9 +1,33 @@
 .posts {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(300px, 1fr)
-  ); /* 3 элемента в ряду, измените ширину элементов по вашему усмотрению */
   row-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   column-gap: 20px;
+  margin-bottom: 30px;
+}
+.post5 {
+  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+}
+.post10 {
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.select {
+  margin-bottom: 10px;
+}
+
+.search {
+  display: flex;
+  align-items: baseline;
+}
+
+.searchInput {
+  width: 100%;
+}
+.searchBtn{
+
 }

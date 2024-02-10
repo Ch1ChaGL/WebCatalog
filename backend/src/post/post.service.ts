@@ -12,6 +12,7 @@ import { BanToggleDto } from './dto/post.banToggle.dto';
 import { PostUpdateDto } from './dto/post.update.dto';
 import { UsersService } from 'src/users/users.service';
 import { RatingService } from 'src/rating/rating.service';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class PostService {
@@ -119,8 +120,14 @@ export class PostService {
     };
   }
 
-  async getAllPost(): Promise<CreatedPost[] | null> {
+  async getAllPosts(paginationDto: PaginationDto, postSearch: string) {
     try {
+      const { page, limit } = paginationDto;
+
+      postSearch = postSearch.trim().toLowerCase();
+
+      const skip = (+page - 1) * +limit;
+
       const posts = await this.prisma.post.findMany({
         include: {
           categoryPost: {
@@ -135,7 +142,48 @@ export class PostService {
           },
           postImage: true,
         },
+        orderBy: { created_at: 'desc' },
+        skip,
+        take: +limit,
+        where: {
+          OR: [
+            {
+              postName: {
+                contains: postSearch,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: postSearch,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
       });
+
+      const mPosts = await this.prisma.post.findMany({
+        where: {
+          OR: [
+            {
+              postName: {
+                contains: postSearch,
+                mode: 'insensitive',
+              },
+            },
+            {
+              description: {
+                contains: postSearch,
+                mode: 'insensitive',
+              },
+            },
+          ],
+        },
+      });
+
+      let totalPosts =
+        postSearch !== '' ? mPosts.length : await this.prisma.post.count();
 
       const formattedPosts = await Promise.all(
         posts.map(async post => {
@@ -144,8 +192,6 @@ export class PostService {
           const userPost = await this.prisma.userPost.findFirst({
             where: { postId: rest.postId },
           });
-
-          console.log(userPost);
 
           const user = await this.userService.getUserById(userPost.userId);
 
@@ -166,7 +212,12 @@ export class PostService {
         }),
       );
 
-      return formattedPosts;
+      return {
+        currentPage: +page,
+        totalPosts,
+        totalPages: Math.ceil(totalPosts / +limit),
+        posts: formattedPosts,
+      };
     } catch (error) {
       console.error('Error fetching posts:', error);
       return null;
@@ -295,6 +346,7 @@ export class PostService {
           },
           postImage: true,
         },
+        orderBy: { created_at: 'desc' },
       });
 
       const formattedPosts = await Promise.all(
@@ -329,5 +381,23 @@ export class PostService {
       console.error('Error fetching posts:', error);
       return null;
     }
+  }
+
+  async deletePost(postId: string) {
+    const images = await this.prisma.postImage.findMany({
+      where: {
+        postId: +postId,
+      },
+    });
+
+    Promise.all(
+      images.map(image => this.fileService.deleteFile(image.filePath)),
+    );
+
+    return await this.prisma.post.deleteMany({
+      where: {
+        postId: +postId,
+      },
+    });
   }
 }

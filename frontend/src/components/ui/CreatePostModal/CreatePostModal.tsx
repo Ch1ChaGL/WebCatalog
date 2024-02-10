@@ -61,7 +61,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({
   };
 
   return (
-    <Modal open={isOpen} onClose={onRequestClose}>
+    <Modal open={isOpen} onClose={onRequestClose} className={styles.modal}>
       <div className={styles.modal__container}>
         <div className={styles.title}>Создание поста</div>
         <form onSubmit={handleSubmit(onSubmit)}>
